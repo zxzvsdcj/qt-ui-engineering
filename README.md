@@ -52,7 +52,7 @@ your-project/
             └── scripts/
 ```
 
-For this private GitHub repository, authenticated Git can clone directly into that directory:
+Clone the public GitHub repository directly into that directory:
 
 ```text
 git clone https://github.com/zxzvsdcj/qt-ui-engineering.git .cursor/skills/qt-ui-engineering
@@ -136,7 +136,7 @@ examples/                  concise adapter-boundary examples
 evals/                     six fixtures, pressure cases, expected profiles, rubric
 scripts/                   static detector and structural validator
 tests/                     standard-library automated tests
-docs/                      approved design/plan and conversation record
+docs/                      approved design and implementation plan
 ```
 
 The original requirements record is intentionally retained only in the local workspace and excluded from version control.
