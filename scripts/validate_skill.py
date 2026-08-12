@@ -48,7 +48,6 @@ CASE_NAMES = (
 REQUIRED_FILES = (
     "SKILL.md",
     "README.md",
-    "docs/Qt_UI_Skills_会话完整记录.md",
     *(f"references/{name}" for name in UNIVERSAL_REFERENCES),
     *(f"references/adapters/{name}" for name in ADAPTER_REFERENCES),
     "templates/design-tokens.md",

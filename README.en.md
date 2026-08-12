@@ -153,8 +153,6 @@ The Skill is an independent synthesis. It paraphrases concepts and does not copy
 - [Qt Style Sheet syntax](https://doc.qt.io/qt-6/stylesheet-syntax.html), [QPalette](https://doc.qt.io/qt-6/qpalette.html), and [Qt Quick Controls styles](https://doc.qt.io/qt-6/qtquickcontrols-styles.html): implementation constraints.
 - [PyQt6/PyQt5 differences](https://www.riverbankcomputing.com/static/Docs/PyQt6/pyqt5_differences.html): binding-version distinctions.
 
-Detailed research decisions are recorded in [findings.md](findings.md).
-
 ## Limitations
 
 - Static detection cannot prove installed runtime versions, generated sources, or deployment platform.

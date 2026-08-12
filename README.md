@@ -153,8 +153,6 @@ docs/                      已批准的设计与实施计划
 - [Qt Style Sheet syntax](https://doc.qt.io/qt-6/stylesheet-syntax.html)、[QPalette](https://doc.qt.io/qt-6/qpalette.html) 和 [Qt Quick Controls styles](https://doc.qt.io/qt-6/qtquickcontrols-styles.html)：提供实现约束。
 - [PyQt6/PyQt5 differences](https://www.riverbankcomputing.com/static/Docs/PyQt6/pyqt5_differences.html)：提供绑定版本差异。
 
-详细的调研决策记录在 [findings.md](findings.md) 中。
-
 ## 已知限制
 
 - 静态检测无法证明已安装的运行时版本、生成源码或部署平台。
