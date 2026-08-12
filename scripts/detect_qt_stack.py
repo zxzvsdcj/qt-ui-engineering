@@ -25,8 +25,11 @@ IGNORED_DIRECTORIES = {
 }
 TEXT_SUFFIXES = {
     ".cmake",
+    ".cc",
     ".cpp",
+    ".cxx",
     ".h",
+    ".hh",
     ".hpp",
     ".pri",
     ".pro",
@@ -142,7 +145,7 @@ def detect_project(root: Path) -> DetectionReport:
         suffix = path.suffix.lower()
         if suffix == ".py":
             languages.add("Python")
-        elif suffix in {".cpp", ".h", ".hpp"}:
+        elif suffix in {".cc", ".cpp", ".cxx", ".h", ".hh", ".hpp"}:
             languages.add("C++")
         elif suffix == ".qml":
             languages.add("QML")
@@ -162,6 +165,7 @@ def detect_project(root: Path) -> DetectionReport:
             for match in BINDING_PATTERN.finditer(line):
                 binding = match.group(1)
                 bindings.add(binding)
+                languages.add("Python")
                 qt_majors.add(BINDING_TO_QT_MAJOR[binding])
                 _add_evidence(evidence, "binding", binding, path, root, line_number)
 

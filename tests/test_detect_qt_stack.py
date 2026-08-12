@@ -101,6 +101,33 @@ class DetectQtStackTests(unittest.TestCase):
         self.assertIsNone(report.binding)
         self.assertEqual([], report.ui_frameworks)
 
+    def test_binding_declared_only_in_requirements_implies_python(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "requirements.txt").write_text("PySide6>=6.7\n", encoding="utf-8")
+
+            report = detect_project(root)
+
+        self.assertEqual("ok", report.status)
+        self.assertEqual("Python", report.language)
+        self.assertEqual("PySide6", report.binding)
+
+    def test_cxx_source_suffix_is_detected_as_cpp(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "CMakeLists.txt").write_text(
+                "find_package(Qt6 REQUIRED COMPONENTS Widgets)\n", encoding="utf-8"
+            )
+            (root / "main.cxx").write_text(
+                "#include <QApplication>\n", encoding="utf-8"
+            )
+
+            report = detect_project(root)
+
+        self.assertEqual("C++", report.language)
+        self.assertEqual(6, report.qt_major)
+        self.assertEqual(["QWidget"], report.ui_frameworks)
+
     def test_conflicting_bindings_are_not_silently_resolved(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
