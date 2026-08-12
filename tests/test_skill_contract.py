@@ -43,6 +43,68 @@ class SkillContractTests(unittest.TestCase):
 
         self.assertEqual(6, len(cases))
 
+    def test_bilingual_readmes_are_complete_and_linked(self):
+        chinese = (ROOT / "README.md").read_text(encoding="utf-8")
+        english = (ROOT / "README.en.md").read_text(encoding="utf-8")
+
+        self.assertTrue(chinese.startswith("**简体中文** | [English](README.en.md)"))
+        self.assertTrue(english.startswith("[简体中文](README.md) | **English**"))
+        self.assertIn("# Qt UI 工程", chinese)
+        self.assertIn("# Qt UI Engineering", english)
+
+        chinese_headings = [
+            "## 核心模型",
+            "## 支持矩阵",
+            "## 安装",
+            "## 使用",
+            "## 静态技术栈检测",
+            "## 设计产物",
+            "## 验证",
+            "## 项目结构",
+            "## 来源与综合方式",
+            "## 已知限制",
+        ]
+        english_headings = [
+            "## Core model",
+            "## Supported matrix",
+            "## Install",
+            "## Use",
+            "## Static stack detection",
+            "## Design artifacts",
+            "## Validate",
+            "## Project structure",
+            "## Sources and synthesis",
+            "## Limitations",
+        ]
+
+        for heading in chinese_headings:
+            with self.subTest(language="zh-CN", heading=heading):
+                self.assertIn(heading, chinese)
+        for heading in english_headings:
+            with self.subTest(language="en", heading=heading):
+                self.assertIn(heading, english)
+
+        shared_fragments = [
+            "git clone https://github.com/zxzvsdcj/qt-ui-engineering.git",
+            "python scripts/detect_qt_stack.py <target-project> --pretty",
+            "python -m unittest discover -s tests -v",
+            "python scripts/validate_skill.py .",
+            "PyQt5",
+            "PyQt6",
+            "PySide2",
+            "PySide6",
+            "Qt 5",
+            "Qt 6",
+        ]
+        for fragment in shared_fragments:
+            with self.subTest(fragment=fragment):
+                self.assertIn(fragment, chinese)
+                self.assertIn(fragment, english)
+
+        self.assertNotIn("private GitHub repository", english)
+        self.assertNotIn("Qt_UI_Skills_会话完整记录.md", chinese)
+        self.assertNotIn("Qt_UI_Skills_会话完整记录.md", english)
+
 
 if __name__ == "__main__":
     unittest.main()
