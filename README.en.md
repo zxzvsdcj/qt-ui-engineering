@@ -138,7 +138,6 @@ examples/                  concise adapter-boundary examples
 evals/                     six fixtures, pressure cases, expected profiles, rubric
 scripts/                   static detector and structural validator
 tests/                     standard-library automated tests
-docs/                      approved design and implementation plan
 ```
 
 The original requirements record is intentionally retained only in the local workspace and excluded from version control.
