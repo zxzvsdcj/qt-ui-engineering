@@ -57,6 +57,7 @@ task_plan.md
 - 从 Git 索引移除四个文件。
 - 修改 `README.md` 和 `README.en.md`，删除失效的 `findings.md` 链接。
 - 增加或调整契约测试，确保公开 README 不再引用 `findings.md`。
+- 从 `scripts/validate_skill.py` 的远程必需文件清单中移除仅本地保存的会话记录，并增加回归测试，确保公开仓库的全新克隆不依赖该本地文件即可通过必需文件校验。
 
 ### 不在范围内
 
@@ -74,11 +75,12 @@ task_plan.md
 3. `git status --short` 不显示四个文件为未跟踪文件。
 4. `.git/info/exclude` 能分别匹配四个文件、Python 缓存和本地会话记录。
 5. `README.md` 与 `README.en.md` 不再包含 `findings.md`。
-6. 中英文 README 的其他本地 Markdown 链接均有效。
-7. 完整测试套件通过，Skill 结构校验通过，`git diff --check` 无错误。
-8. 推送后，本地 `HEAD` 与远程 `main` 一致。
-9. GitHub 当前 `main` 查询四个文件均返回 Not Found。
-10. 旧提交历史保持不变且不宣称已彻底清除这些文件。
+6. 验证器不再把仅本地会话记录视为公开仓库的必需文件，且回归测试覆盖这一行为。
+7. 中英文 README 的其他本地 Markdown 链接均有效。
+8. 完整测试套件通过，Skill 结构校验通过，`git diff --check` 无错误。
+9. 推送后，本地 `HEAD` 与远程 `main` 一致。
+10. GitHub 当前 `main` 查询四个文件均返回 Not Found。
+11. 旧提交历史保持不变且不宣称已彻底清除这些文件。
 
 ## 7. 风险与处理
 
@@ -86,4 +88,5 @@ task_plan.md
 - **本地文件误删：** 取消跟踪前记录四个文件的 SHA-256，操作后逐一核对存在性和哈希。
 - **忽略规则丢失：** 在取消跟踪 `.gitignore` 前先将全部现有规则写入 `.git/info/exclude` 并验证匹配。
 - **README 失效链接：** 在同一实现批次移除中英文 `findings.md` 引用，并运行链接校验。
+- **公开克隆验证失败：** 从验证器必需文件清单中移除仅本地会话记录，并使用不创建该文件的回归测试证明公开副本可验证。
 - **后续克隆缺少 `.gitignore`：** 这是用户要求从远程移除 `.gitignore` 的直接结果；本地仓库仍由 `.git/info/exclude` 保护，新克隆不会继承这些本地排除规则。
