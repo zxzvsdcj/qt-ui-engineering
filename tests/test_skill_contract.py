@@ -106,6 +106,8 @@ class SkillContractTests(unittest.TestCase):
         self.assertNotIn("Qt_UI_Skills_会话完整记录.md", english)
         self.assertNotIn("findings.md", chinese)
         self.assertNotIn("findings.md", english)
+        self.assertNotIn("docs/", chinese)
+        self.assertNotIn("docs/", english)
 
 
 if __name__ == "__main__":
