@@ -65,7 +65,7 @@
 - Produces: `detect_project(root: pathlib.Path) -> DetectionReport`.
 - Produces: CLI `python scripts/detect_qt_stack.py <project> [--pretty]`, exit `0` for `ok`/`unknown`, exit `2` for `conflict`.
 
-- [ ] **Step 1: Create isolated fixture evidence**
+- [x] **Step 1: Create isolated fixture evidence**
 
 Use only minimal, valid-identifying text. Examples:
 
@@ -111,7 +111,7 @@ int main(int argc, char *argv[]) {
 }
 ```
 
-- [ ] **Step 2: Write detector tests before the implementation exists**
+- [x] **Step 2: Write detector tests before the implementation exists**
 
 Cover all six expected profiles plus unknown and conflicting bindings:
 
@@ -144,12 +144,12 @@ class DetectQtStackTests(unittest.TestCase):
         self.assertTrue(report.warnings)
 ```
 
-- [ ] **Step 3: Run the detector tests and observe the required failure**
+- [x] **Step 3: Run the detector tests and observe the required failure**
 
 Run: `python -m unittest tests.test_detect_qt_stack -v`  
 Expected: `ModuleNotFoundError: No module named 'scripts.detect_qt_stack'`.
 
-- [ ] **Step 4: Implement the minimal static detector**
+- [x] **Step 4: Implement the minimal static detector**
 
 Use dataclasses, deterministic sorted traversal, ignored build/VCS directories, UTF-8 text reads with replacement, and explicit regex evidence. The core shape is:
 
@@ -183,7 +183,7 @@ def detect_project(root: Path) -> DetectionReport:
 
 Binding evidence maps `PyQt5→5`, `PyQt6→6`, `PySide2→5`, `PySide6→6`. `find_package(Qt5|Qt6)` and qmake/CMake declarations supplement source imports. QWidget and QML may coexist without becoming a conflict; multiple Python bindings or both Qt major versions do become a conflict.
 
-- [ ] **Step 5: Run detector tests and CLI smoke checks**
+- [x] **Step 5: Run detector tests and CLI smoke checks**
 
 Run: `python -m unittest tests.test_detect_qt_stack -v`  
 Expected: all detector tests pass.
@@ -191,7 +191,7 @@ Expected: all detector tests pass.
 Run: `python scripts/detect_qt_stack.py evals/fixtures/qt6-qml --pretty`  
 Expected JSON fields include `"status": "ok"`, `"qt_major": 6`, and `"Qt Quick/QML"`.
 
-- [ ] **Step 6: Commit and push Task 1**
+- [x] **Step 6: Commit and push Task 1**
 
 ```powershell
 git add scripts/detect_qt_stack.py tests/test_detect_qt_stack.py evals/fixtures

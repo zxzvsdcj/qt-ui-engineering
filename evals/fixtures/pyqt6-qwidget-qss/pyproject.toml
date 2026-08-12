@@ -1,0 +1,4 @@
+[project]
+name = "pyqt6-qwidget-fixture"
+version = "0.1.0"
+dependencies = ["PyQt6>=6.7"]
