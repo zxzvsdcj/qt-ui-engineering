@@ -18,9 +18,9 @@ Implement the approved `qt-ui-engineering` Agent Skill directly in `E:/cursor/qt
 
 | Phase | Status | Exit condition |
 |---|---|---|
-| 1. Design and repository baseline | In progress | Approved specification and planning records are committed and pushed |
-| 2. Research and implementation plan | Pending | Primary-source findings and a self-reviewed, task-level plan are saved |
-| 3. Detection and validation tools | Pending | Failure-first tests pass using the Python standard library |
+| 1. Design and repository baseline | Complete | Approved specification and planning records are committed and pushed |
+| 2. Research and implementation plan | Complete | Primary-source findings and a self-reviewed, task-level plan are saved |
+| 3. Detection and validation tools | In progress | Failure-first tests pass using the Python standard library |
 | 4. Skill core and universal references | Pending | `SKILL.md`, templates, and universal design guidance pass validation |
 | 5. Qt adapters and examples | Pending | All required framework and stack adapters are complete and linked |
 | 6. Six-stack evaluations | Pending | All fixture detections pass and rubric cases contain no placeholders |
@@ -40,4 +40,3 @@ Implement the approved `qt-ui-engineering` Agent Skill directly in `E:/cursor/qt
 | Public ChatGPT share returned no readable body | 1 | User supplied the complete conversation as a local Markdown file |
 | Browser automation CLI unavailable | 1 | Stopped without installing dependencies; used the supplied local record |
 | Initial Git inspection failed because the directory was not a repository | 1 | User explicitly requested repository initialization and remote creation |
-

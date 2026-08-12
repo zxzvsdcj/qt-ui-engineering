@@ -1,7 +1,7 @@
 # Qt UI Engineering Skill — Design Specification
 
 **Date:** 2026-08-12  
-**Status:** Approved design awaiting written-spec review  
+**Status:** Approved
 **Project root:** `E:/cursor/qt-ui-engineering`  
 **Skill name:** `qt-ui-engineering`
 
