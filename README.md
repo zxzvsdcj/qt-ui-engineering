@@ -139,7 +139,7 @@ tests/                     standard-library automated tests
 docs/                      approved design/plan and conversation record
 ```
 
-The original requirements record is preserved at [docs/Qt_UI_Skills_会话完整记录.md](docs/Qt_UI_Skills_会话完整记录.md).
+The original requirements record is intentionally retained only in the local workspace and excluded from version control.
 
 ## Sources and synthesis
 
