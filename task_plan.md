@@ -20,11 +20,11 @@ Implement the approved `qt-ui-engineering` Agent Skill directly in `E:/cursor/qt
 |---|---|---|
 | 1. Design and repository baseline | Complete | Approved specification and planning records are committed and pushed |
 | 2. Research and implementation plan | Complete | Primary-source findings and a self-reviewed, task-level plan are saved |
-| 3. Detection and validation tools | In progress | Failure-first tests pass using the Python standard library |
+| 3. Detection and validation tools | Complete | Failure-first tests pass using the Python standard library |
 | 4. Skill core and universal references | Complete | `SKILL.md`, templates, and universal design guidance pass validation |
 | 5. Qt adapters and examples | Complete | All required framework and stack adapters are complete and linked |
 | 6. Six-stack evaluations | Complete | All fixture detections pass and rubric cases contain no placeholders |
-| 7. Final verification and delivery | Pending | Full test suite, validator, link scan, source audit, and Git push succeed |
+| 7. Final verification and delivery | Complete | Full test suite, validator, link scan, source audit, and Git push succeed |
 
 ## Key decisions
 
@@ -40,3 +40,4 @@ Implement the approved `qt-ui-engineering` Agent Skill directly in `E:/cursor/qt
 | Public ChatGPT share returned no readable body | 1 | User supplied the complete conversation as a local Markdown file |
 | Browser automation CLI unavailable | 1 | Stopped without installing dependencies; used the supplied local record |
 | Initial Git inspection failed because the directory was not a repository | 1 | User explicitly requested repository initialization and remote creation |
+| Recursive removal of generated `__pycache__` directories was blocked by execution policy | 1 | Added standard ignore rules and left generated caches untracked/ignored; no bypass attempted |

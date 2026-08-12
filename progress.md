@@ -19,4 +19,13 @@
 - Skill RED: created six pressure scenarios and a contract test before `SKILL.md`; three tests failed with the expected missing-file error.
 - Skill GREEN: created the 159-line main Skill, 12 universal references, 11 adapters, three templates, and three boundary examples.
 - Verification: 15 tests passed in 0.109 seconds and every relative link in `SKILL.md` resolved.
-- Next: commit/push the Skill milestone, then write failure-first tests for the deterministic validator.
+- Committed and pushed Skill milestone `c14a447`.
+- Validator RED: eight validator tests failed to import because `scripts.validate_skill` did not exist.
+- Validator GREEN: all eight unit tests passed; the real project then reported only the expected missing `README.md`.
+- Added the complete README and two detector regression tests. Both regressions failed for the expected reasons, then passed after the minimal suffix/language inference fix.
+- Fresh pre-commit verification: 25 tests passed in 0.627 seconds, structural validation returned `OK`, Python files compiled, placeholder scan was empty, QSS Web-syntax matches were warnings only, and `git diff --check` passed.
+- The environment blocked recursive deletion of generated `__pycache__` directories. Added `.gitignore` rules; caches remain local and excluded from Git.
+- Pre-commit verification for the delivery milestone: 25 tests passed in 0.633 seconds, structural validation returned `OK`, and `git diff --check` passed.
+- Committed and pushed detector refinements, deterministic validator, tests, README, and ignore rules as `f29fbac`.
+- Independent subagent code review and fresh-agent Skill trials were not run because subagent dispatch was not authorized. Manual diff review, deterministic checks, and reusable evaluation cases were completed instead.
+- Final handoff: commit/push planning evidence, verify remote `main` through the GitHub integration, then rerun the full suite from the committed state.

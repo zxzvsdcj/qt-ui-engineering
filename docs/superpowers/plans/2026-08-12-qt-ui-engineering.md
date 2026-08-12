@@ -431,7 +431,7 @@ git push
 - Produces: `validate_skill(root: pathlib.Path) -> list[ValidationIssue]`.
 - Produces: CLI `python scripts/validate_skill.py [root]`, exit `0` with `OK`, exit `1` with issues.
 
-- [ ] **Step 1: Write validator tests before implementation**
+- [x] **Step 1: Write validator tests before implementation**
 
 Tests create temporary Skill trees from the exported `REQUIRED_FILES` list. A shared `write_valid_skill(root)` helper writes a valid frontmatter document, the required evaluation JSON, and minimal non-placeholder Markdown for every required path. Individual tests then make exactly one mutation and assert the corresponding issue code:
 
@@ -443,12 +443,12 @@ Tests create temporary Skill trees from the exported `REQUIRED_FILES` list. A sh
 
 The placeholder scan includes `SKILL.md`, `README.md`, `references`, `templates`, `examples`, and `evals`, but excludes historical conversation, approved specs/plans, and progress records.
 
-- [ ] **Step 2: Run and observe the required import failure**
+- [x] **Step 2: Run and observe the required import failure**
 
 Run: `python -m unittest tests.test_validate_skill -v`  
 Expected: `ModuleNotFoundError: No module named 'scripts.validate_skill'`.
 
-- [ ] **Step 3: Implement minimal validation functions**
+- [x] **Step 3: Implement minimal validation functions**
 
 Use a frontmatter delimiter parser, Markdown inline-link regex, root-contained path resolution, deterministic traversal, and exact issue codes:
 
@@ -470,7 +470,7 @@ def validate_skill(root: Path) -> list[ValidationIssue]:
     return sorted(issues, key=lambda item: (item.path, item.code, item.message))
 ```
 
-- [ ] **Step 4: Run tests and validate the real project**
+- [x] **Step 4: Run tests and validate the real project**
 
 Run: `python -m unittest tests.test_validate_skill -v`  
 Expected: all validator unit tests pass.
@@ -478,7 +478,7 @@ Expected: all validator unit tests pass.
 Run: `python scripts/validate_skill.py .`  
 Expected: `OK: qt-ui-engineering skill is structurally valid`.
 
-- [ ] **Step 5: Commit and push Task 5**
+- [x] **Step 5: Commit and push Task 5**
 
 ```powershell
 git add scripts/validate_skill.py tests/test_validate_skill.py
@@ -500,11 +500,11 @@ git push
 - Consumes: detector and validator CLIs, approved architecture, source findings.
 - Produces: install/use/validation documentation and final evidence.
 
-- [ ] **Step 1: Write README**
+- [x] **Step 1: Write README**
 
 Include: purpose, supported matrix, architecture diagram, installation by copying/cloning the repository as a Skill directory, trigger examples, minimal invocation, detector output example, validation commands, source acknowledgments/links, non-goals, and limitations. State that `scripts/detect_qt_stack.py` is advisory and must not replace reading relevant project files.
 
-- [ ] **Step 2: Run full automated verification**
+- [x] **Step 2: Run full automated verification**
 
 Run: `python -m unittest discover -s tests -v`  
 Expected: all tests pass.
@@ -514,7 +514,7 @@ Expected: `OK: qt-ui-engineering skill is structurally valid`.
 
 Run each fixture through the detector and compare the stable fields with `evals/expected/stack-detection.json`; expected: six matches and zero conflicts.
 
-- [ ] **Step 3: Run content audits**
+- [x] **Step 3: Run content audits**
 
 Run: `rg -n "TBD|TODO|FIXME|implement later|fill in" SKILL.md README.md references templates examples evals`  
 Expected: no matches.
@@ -525,11 +525,11 @@ Expected: matches only in explicit warnings against unsupported Web CSS patterns
 Run: `git diff --check`  
 Expected: no whitespace errors.
 
-- [ ] **Step 4: Record final evidence and inspect Git state**
+- [x] **Step 4: Record final evidence and inspect Git state**
 
 Update `task_plan.md` phases to Complete and record exact test counts/commands in `progress.md`. Run `git status --short` and review every changed file before committing.
 
-- [ ] **Step 5: Commit, push, and verify remote**
+- [x] **Step 5: Commit, push, and verify remote**
 
 ```powershell
 git add README.md findings.md progress.md task_plan.md
