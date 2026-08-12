@@ -1,0 +1,50 @@
+{
+  "pyqt5-qwidget-qss": {
+    "status": "ok",
+    "language": "Python",
+    "qt_major": 5,
+    "binding": "PyQt5",
+    "ui_frameworks": ["QWidget"],
+    "styling": ["QSS"]
+  },
+  "pyqt6-qwidget-qss": {
+    "status": "ok",
+    "language": "Python",
+    "qt_major": 6,
+    "binding": "PyQt6",
+    "ui_frameworks": ["QWidget"],
+    "styling": ["QSS"]
+  },
+  "pyside2-qwidget": {
+    "status": "ok",
+    "language": "Python",
+    "qt_major": 5,
+    "binding": "PySide2",
+    "ui_frameworks": ["QWidget"],
+    "styling": []
+  },
+  "pyside6-qwidget-qss": {
+    "status": "ok",
+    "language": "Python",
+    "qt_major": 6,
+    "binding": "PySide6",
+    "ui_frameworks": ["QWidget"],
+    "styling": ["QSS"]
+  },
+  "qt6-qml": {
+    "status": "ok",
+    "language": "QML/C++",
+    "qt_major": 6,
+    "binding": null,
+    "ui_frameworks": ["Qt Quick/QML"],
+    "styling": ["Qt Quick Controls"]
+  },
+  "qt5-cpp-qwidget": {
+    "status": "ok",
+    "language": "C++",
+    "qt_major": 5,
+    "binding": null,
+    "ui_frameworks": ["QWidget"],
+    "styling": []
+  }
+}

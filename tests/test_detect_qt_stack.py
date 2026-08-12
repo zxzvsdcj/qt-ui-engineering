@@ -13,6 +13,29 @@ FIXTURES = ROOT / "evals" / "fixtures"
 
 
 class DetectQtStackTests(unittest.TestCase):
+    def test_all_fixture_profiles_match_the_expected_matrix(self):
+        expected = json.loads(
+            (ROOT / "evals" / "expected" / "stack-detection.json").read_text(
+                encoding="utf-8"
+            )
+        )
+
+        for fixture_name, expected_profile in expected.items():
+            with self.subTest(fixture=fixture_name):
+                actual = detect_project(FIXTURES / fixture_name).to_dict()
+                stable_profile = {
+                    field: actual[field]
+                    for field in (
+                        "status",
+                        "language",
+                        "qt_major",
+                        "binding",
+                        "ui_frameworks",
+                        "styling",
+                    )
+                }
+                self.assertEqual(expected_profile, stable_profile)
+
     def test_pyqt5_qwidget_qss(self):
         report = detect_project(FIXTURES / "pyqt5-qwidget-qss")
 

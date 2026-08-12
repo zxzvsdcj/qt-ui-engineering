@@ -21,9 +21,9 @@ Implement the approved `qt-ui-engineering` Agent Skill directly in `E:/cursor/qt
 | 1. Design and repository baseline | Complete | Approved specification and planning records are committed and pushed |
 | 2. Research and implementation plan | Complete | Primary-source findings and a self-reviewed, task-level plan are saved |
 | 3. Detection and validation tools | In progress | Failure-first tests pass using the Python standard library |
-| 4. Skill core and universal references | Pending | `SKILL.md`, templates, and universal design guidance pass validation |
-| 5. Qt adapters and examples | Pending | All required framework and stack adapters are complete and linked |
-| 6. Six-stack evaluations | Pending | All fixture detections pass and rubric cases contain no placeholders |
+| 4. Skill core and universal references | Complete | `SKILL.md`, templates, and universal design guidance pass validation |
+| 5. Qt adapters and examples | Complete | All required framework and stack adapters are complete and linked |
+| 6. Six-stack evaluations | Complete | All fixture detections pass and rubric cases contain no placeholders |
 | 7. Final verification and delivery | Pending | Full test suite, validator, link scan, source audit, and Git push succeed |
 
 ## Key decisions

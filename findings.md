@@ -43,3 +43,10 @@ Use Qt's native constraints as the correctness foundation, Anthropic's product-s
 - [QPalette](https://doc.qt.io/qt-6/qpalette.html) represents color groups and semantic roles; palette guidance must respect inactive/disabled groups rather than flatten all colors into QSS.
 - [Qt Quick Controls styles](https://doc.qt.io/qt-6/qtquickcontrols-styles.html) support compile-time and runtime selection with different trade-offs; adapters must preserve the project's chosen mechanism and avoid explicitly mixing styles.
 - [Riverbank's PyQt6/PyQt5 differences](https://www.riverbankcomputing.com/static/Docs/PyQt6/pyqt5_differences.html) confirm important binding-version differences including scoped enums and removal of `exec_()`/`print_()` in PyQt6; version adapters must not present one syntax as universal.
+
+## Skill TDD evidence and limitation
+
+- Before `SKILL.md` existed, six pressure cases captured predictable failure modes: unsolicited migration, binding/API mixing, QWidget/QML translation, Web CSS assumptions, decorative low-density dashboards, and unprioritized visual review.
+- The initial Skill contract run produced three expected `FileNotFoundError` failures because `SKILL.md` did not exist; the six-case existence check passed.
+- After the Skill and references were written, all four Skill contract tests passed and all relative links from `SKILL.md` resolved.
+- Current project instructions do not permit spawning subagents unless the user explicitly requests them. Therefore fresh-agent behavioral repetitions from `writing-skills` were not run. The repository ships six reusable cases and a weighted rubric so those trials can be performed later without changing the Skill contract.

@@ -226,7 +226,7 @@ git push
 - Produces: exact reference routing based on task and detected stack.
 - Produces: universal semantic token tiers: primitive → semantic → component.
 
-- [ ] **Step 1: Author `SKILL.md` frontmatter and routing contract**
+- [x] **Step 1: Author `SKILL.md` frontmatter and routing contract**
 
 Use this metadata and no `disable-model-invocation` field:
 
@@ -239,7 +239,7 @@ description: Designs, implements, reviews, and improves professional Qt user int
 
 The body must contain: non-negotiable inspect-before-design rules; the three layers; the 11-step workflow; task and stack routing tables; conflict/migration stop conditions; Information-Density First; Anti-AI-Slop; review gates; and the expected response sections `Detected stack`, `Design intent`, `Implementation`, `Review`, `Risks`.
 
-- [ ] **Step 2: Author universal design references**
+- [x] **Step 2: Author universal design references**
 
 Give each file one responsibility and concrete decisions:
 
@@ -256,11 +256,11 @@ Give each file one responsibility and concrete decisions:
 - `stack-detection.md`: evidence precedence, JSON interpretation, conflict behavior, manual fallback.
 - `ui-review-checklist.md`: severity (`Blocking`, `Major`, `Minor`, `Enhancement`), evidence, and eight review dimensions.
 
-- [ ] **Step 3: Author reusable templates**
+- [x] **Step 3: Author reusable templates**
 
 `design-tokens.md` defines exact tables for primitive, semantic, component, typography, spacing, control size, density, motion, and state tokens. `ui-design-brief.md` records product, users, platform, frequent tasks, existing stack, content hierarchy, density, visual direction, and measurable success. `ui-review.md` records summary, detected stack, findings with severity/evidence/remediation, quality gates, and residual risks.
 
-- [ ] **Step 4: Run manual structural checks**
+- [x] **Step 4: Run manual structural checks**
 
 Run: `(Get-Content SKILL.md).Count`  
 Expected: integer below `500`.
@@ -268,7 +268,7 @@ Expected: integer below `500`.
 Run: `rg -n "TBD|TODO|FIXME|:root|var\(--|box-shadow" SKILL.md references templates`  
 Expected: no placeholders; Web-only syntax appears only in explicitly prohibited examples.
 
-- [ ] **Step 5: Commit and push Task 2**
+- [x] **Step 5: Commit and push Task 2**
 
 ```powershell
 git add SKILL.md references templates
@@ -300,7 +300,7 @@ git push
 - Consumes: universal semantic tokens and detected stack.
 - Produces: framework-correct implementation rules without cross-stack compatibility shims.
 
-- [ ] **Step 1: Author framework adapters**
+- [x] **Step 1: Author framework adapters**
 
 `qwidget.md` must cover `QMainWindow`, layouts, `QSizePolicy`, `sizeHint`, splitters/docks/tabs, Model/View, keyboard/focus, DPI and resize testing; it must reject absolute positioning, gratuitous fixed sizes, excessive nesting, and using `QScrollArea` to conceal broken layout.
 
@@ -308,13 +308,13 @@ git push
 
 `qt-designer.md` must cover `.ui` ownership, generated-code boundaries, promoted widgets, object names as stable styling/test hooks, and regeneration safety.
 
-- [ ] **Step 2: Author styling adapters**
+- [x] **Step 2: Author styling adapters**
 
 `qss.md` must document supported Qt selectors, sub-controls, pseudo-states, specificity/cascade differences, dynamic-property repolishing, restrained complex-widget overrides, semantic token rendering, and the explicit prohibition on CSS variables, `!important`, arbitrary browser properties, and unverified sub-controls.
 
 `qpalette-qstyle.md` must explain palette color roles/groups, native-style preservation, when `QProxyStyle` is justified, and why QSS, palette, and style ownership must not fight over the same visual property.
 
-- [ ] **Step 3: Author binding/version adapters**
+- [x] **Step 3: Author binding/version adapters**
 
 Each adapter contains import namespace, Qt major, enum style, application execution form, signal/slot/property vocabulary, UI loader/resource notes, and a short “never mix with” list. Required examples include:
 
@@ -341,11 +341,11 @@ result = dialog.exec()
 
 C++ adapters distinguish `find_package(Qt5 REQUIRED COMPONENTS Widgets)` with `target_link_libraries(app PRIVATE Qt5::Widgets)` from the corresponding `Qt6` CMake targets, and state that API details must be verified against the project's exact Qt minor version.
 
-- [ ] **Step 4: Add concise boundary examples**
+- [x] **Step 4: Add concise boundary examples**
 
 The QWidget example maps one semantic token set to palette roles and a generated QSS template; the QML example maps the same roles to a singleton/theme object; the themes example compares native palette, QSS, `QProxyStyle`, and Qt Quick Controls ownership. Examples must not claim one implementation is portable to every stack.
 
-- [ ] **Step 5: Audit adapter isolation**
+- [x] **Step 5: Audit adapter isolation**
 
 Run: `rg -n "PyQt5|PyQt6|PySide2|PySide6" references/adapters`  
 Expected: binding names occur in their own adapter and explicit comparison sections only.
@@ -353,7 +353,7 @@ Expected: binding names occur in their own adapter and explicit comparison secti
 Run: `rg -n ":root|var\(--|!important" references/adapters/qss.md examples`  
 Expected: matches only describe forbidden Web CSS patterns.
 
-- [ ] **Step 6: Commit and push Task 3**
+- [x] **Step 6: Commit and push Task 3**
 
 ```powershell
 git add references/adapters examples
@@ -380,7 +380,7 @@ git push
 - Consumes: `DetectionReport.to_dict()` stable profile fields.
 - Produces: fixture-name keyed expected profiles and nine-dimension rubric.
 
-- [ ] **Step 1: Write expected profile JSON**
+- [x] **Step 1: Write expected profile JSON**
 
 Use exact stable fields, excluding evidence line details:
 
@@ -395,19 +395,19 @@ Use exact stable fields, excluding evidence line details:
 }
 ```
 
-- [ ] **Step 2: Add one table-driven expected-profile test**
+- [x] **Step 2: Add one table-driven expected-profile test**
 
 Load the JSON, run all fixture directories, and compare the exact named stable fields. Run the test and correct detector or fixture evidence one change at a time.
 
-- [ ] **Step 3: Author evaluation cases**
+- [x] **Step 3: Author evaluation cases**
 
 Each case includes: representative user request, fixture path, expected detected stack, required references, prohibited migration/API mixing, Information-Density First assertion, Anti-AI-Slop assertion, interaction/accessibility review, and pass conditions. Case-specific tasks are: data-heavy settings page, monitoring table, legacy property editor, analysis workspace, QML control panel, and Qt 5 C++ inspector.
 
-- [ ] **Step 4: Author weighted rubric**
+- [x] **Step 4: Author weighted rubric**
 
 Use nine dimensions totaling 100: Qt correctness 20, task efficiency 15, information density 15, readability/hierarchy 10, interaction completeness 10, accessibility 10, visual specificity 10, maintainability 5, review evidence 5. Define `Pass >= 80`, no Qt-correctness zero, and no blocking finding.
 
-- [ ] **Step 5: Run tests and commit**
+- [x] **Step 5: Run tests and commit**
 
 Run: `python -m unittest tests.test_detect_qt_stack -v`  
 Expected: all tests pass, including the six-profile table.
