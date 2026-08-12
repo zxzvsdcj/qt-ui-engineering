@@ -104,6 +104,8 @@ class SkillContractTests(unittest.TestCase):
         self.assertNotIn("private GitHub repository", english)
         self.assertNotIn("Qt_UI_Skills_会话完整记录.md", chinese)
         self.assertNotIn("Qt_UI_Skills_会话完整记录.md", english)
+        self.assertNotIn("findings.md", chinese)
+        self.assertNotIn("findings.md", english)
 
 
 if __name__ == "__main__":

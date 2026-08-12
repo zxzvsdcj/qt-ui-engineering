@@ -155,6 +155,18 @@ class ValidateSkillTests(unittest.TestCase):
 
         self.assertEqual([], issues)
 
+    def test_local_conversation_record_is_not_required(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_skill(root)
+            local_record = root / "docs" / "Qt_UI_Skills_会话完整记录.md"
+
+            issues = validate_skill(root)
+
+            self.assertFalse(local_record.exists())
+
+        self.assertEqual([], issues)
+
 
 if __name__ == "__main__":
     unittest.main()
