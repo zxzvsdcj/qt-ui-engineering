@@ -69,6 +69,18 @@ def issue_codes(root: Path) -> set[str]:
 
 
 class ValidateSkillTests(unittest.TestCase):
+    def test_widget_upgrade_artifacts_are_required(self):
+        required = set(REQUIRED_FILES)
+        expected = {
+            ".cursor/rules/qt-ui-engineering/14-resource_deploy.md",
+            "snippets/tableview_model_demo.py",
+            "evals/cases/widget-large-table-model-view.md",
+            "evals/evals.json",
+            "tests/test_widget_upgrade_contract.py",
+        }
+
+        self.assertTrue(expected.issubset(required))
+
     def test_frontmatter_description_is_required(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

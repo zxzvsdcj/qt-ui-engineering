@@ -1,4 +1,5 @@
 import ast
+import json
 import re
 import unittest
 from pathlib import Path
@@ -251,6 +252,55 @@ class WidgetUpgradeContractTests(unittest.TestCase):
         for fragment in ("QFile", "__file__", 'startswith(\":/\")', "QIcon"):
             with self.subTest(kind="resource", fragment=fragment):
                 self.assertIn(fragment, resources)
+
+    def test_three_widget_upgrade_evals_match_requested_contracts(self):
+        path = ROOT / "evals" / "evals.json"
+        self.assertTrue(path.is_file(), "missing evals/evals.json")
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        self.assertEqual("qt-ui-engineering", payload["skill_name"])
+        self.assertEqual(3, len(payload["evals"]))
+        prompts = "\n".join(item["prompt"] for item in payload["evals"])
+        for fragment in (
+            "可折叠左侧侧边导航",
+            "完整实现HiDPI适配",
+            "展示数千条动态业务表格数据",
+        ):
+            with self.subTest(fragment=fragment):
+                self.assertIn(fragment, prompts)
+        for item in payload["evals"]:
+            self.assertGreaterEqual(len(item["assertions"]), 3)
+
+    def test_all_widget_upgrade_files_are_present(self):
+        rule_names = (
+            "0-meta.md",
+            "08-ux-interaction.md",
+            "09-icon-system.md",
+            "10-hidpi_cross_platform.md",
+            "11-window_dialog.md",
+            "12-model_view.md",
+            "13-ui_state_persistence.md",
+            "14-resource_deploy.md",
+        )
+        snippet_names = (
+            "hidpi_init.py",
+            "custom_dialog_template.py",
+            "tableview_model_demo.py",
+            "ui_persistence_helper.py",
+            "resource_loader.py",
+        )
+        eval_names = (
+            "widget-comprehensive-persistence.md",
+            "widget-hidpi-dialog-qrc.md",
+            "widget-large-table-model-view.md",
+        )
+        required = (
+            *(RULE_ROOT / name for name in rule_names),
+            *(ROOT / "snippets" / name for name in snippet_names),
+            *(ROOT / "evals" / "cases" / name for name in eval_names),
+        )
+        for path in required:
+            with self.subTest(path=path):
+                self.assertTrue(path.is_file())
 
 
 if __name__ == "__main__":

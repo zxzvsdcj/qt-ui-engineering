@@ -38,10 +38,10 @@ class SkillContractTests(unittest.TestCase):
         self.assertIn("Detected stack", content)
         self.assertIn("Risks", content)
 
-    def test_six_evaluation_cases_exist(self):
+    def test_nine_evaluation_cases_exist(self):
         cases = sorted((ROOT / "evals" / "cases").glob("*.md"))
 
-        self.assertEqual(6, len(cases))
+        self.assertEqual(9, len(cases))
 
     def test_bilingual_readmes_are_complete_and_linked(self):
         chinese = (ROOT / "README.md").read_text(encoding="utf-8")

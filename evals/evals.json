@@ -1,0 +1,41 @@
+{
+  "skill_name": "qt-ui-engineering",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "写一个PySide6自用工具主窗口，可折叠左侧侧边导航，包含设置、文件、导出；支持亮暗黑切换；导航栏带有SVG图标；耗时任务提供加载状态反馈；软件重启自动记忆窗口大小、侧边栏展开/折叠状态。",
+      "expected_output": "Widget主窗口使用主题自适应SVG、非阻塞任务反馈和UI状态持久化。",
+      "files": [],
+      "assertions": [
+        "SVG icon follows theme colors",
+        "long task does not block the UI thread",
+        "window and sidebar state are persisted",
+        "QStyle SP icons are not used"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "使用PySide6开发工具窗口，提供打开文件按钮，弹出标准文件选择框；支持打开自定义表单弹窗；完整实现HiDPI适配；不写死主窗口固定像素尺寸；资源使用qrc方式管理。",
+      "expected_output": "Qt 6 DPI初始化、正确parent的文件与表单对话框、可伸缩窗口和qrc资源路径。",
+      "files": [],
+      "assertions": [
+        "DPI policy is configured before QApplication",
+        "dialogs receive the main window parent",
+        "main window does not use setFixedSize",
+        "resources use colon-prefixed qrc paths"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "基于PySide6实现窗口，展示数千条动态业务表格数据，支持单选；优化渲染性能；表头宽度允许拖拽调整，布局状态重启保留。",
+      "expected_output": "QTableView与自定义Model使用纯内存data回调、单选、交互式表头和持久化状态。",
+      "files": [],
+      "assertions": [
+        "QTableView and QAbstractTableModel are used",
+        "model data callback performs no I/O",
+        "selection mode is single selection",
+        "header state is persisted"
+      ]
+    }
+  ]
+}

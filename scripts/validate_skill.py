@@ -45,6 +45,28 @@ CASE_NAMES = (
     "qt6-qml",
     "qt5-cpp-qwidget",
 )
+WIDGET_RULE_NAMES = (
+    "0-meta.md",
+    "08-ux-interaction.md",
+    "09-icon-system.md",
+    "10-hidpi_cross_platform.md",
+    "11-window_dialog.md",
+    "12-model_view.md",
+    "13-ui_state_persistence.md",
+    "14-resource_deploy.md",
+)
+SNIPPET_NAMES = (
+    "hidpi_init.py",
+    "custom_dialog_template.py",
+    "tableview_model_demo.py",
+    "ui_persistence_helper.py",
+    "resource_loader.py",
+)
+WIDGET_EVAL_NAMES = (
+    "widget-comprehensive-persistence",
+    "widget-hidpi-dialog-qrc",
+    "widget-large-table-model-view",
+)
 REQUIRED_FILES = (
     "SKILL.md",
     "README.md",
@@ -58,6 +80,8 @@ REQUIRED_FILES = (
     "examples/themes/README.md",
     "evals/rubric.md",
     *(f"evals/cases/{name}.md" for name in CASE_NAMES),
+    *(f"evals/cases/{name}.md" for name in WIDGET_EVAL_NAMES),
+    "evals/evals.json",
     "evals/expected/stack-detection.json",
     "evals/fixtures/pyqt5-qwidget-qss/app.py",
     "evals/fixtures/pyqt5-qwidget-qss/theme.qss",
@@ -75,9 +99,12 @@ REQUIRED_FILES = (
     "evals/fixtures/qt5-cpp-qwidget/main.cpp",
     "scripts/detect_qt_stack.py",
     "scripts/validate_skill.py",
+    *(f".cursor/rules/qt-ui-engineering/{name}" for name in WIDGET_RULE_NAMES),
+    *(f"snippets/{name}" for name in SNIPPET_NAMES),
     "tests/test_detect_qt_stack.py",
     "tests/test_skill_contract.py",
     "tests/test_validate_skill.py",
+    "tests/test_widget_upgrade_contract.py",
 )
 MARKDOWN_LINK_PATTERN = re.compile(r"(?<!!)\[[^\]]+\]\(([^)]+)\)")
 PLACEHOLDER_PATTERN = re.compile(
