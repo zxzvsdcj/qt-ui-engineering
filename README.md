@@ -159,3 +159,23 @@ tests/                     基于标准库的自动化测试
 - 本仓库不会安装 Qt SDK 或 Python 绑定，因此夹具验证的是技术栈检测，而不是编译六个 GUI 应用程序。
 - 视觉品味和工作流质量需要通过渲染后的交互审查来判断；确定性测试不会宣称能够衡量这些内容。
 - 创建期间未运行由全新 Agent 重复执行的行为试验，因为当时未获得子代理调度授权。仓库已包含六个可复用的压力场景和一份加权量表，供后续试验使用。
+
+## Qt Widget 高级工程规则
+
+本仓库新增一层仅面向 Qt Widget 的工程规则，用于补齐自用桌面工具在高分屏、窗口交互、大数据视图、界面状态恢复和资源发布方面的实践。根 Skill 原有的 QML / Qt Quick 适配能力继续保留；以下规则不得套用于 QML 代码。
+
+- [Hi-DPI 与跨平台兼容](.cursor/rules/qt-ui-engineering/10-hidpi_cross_platform.md)
+- [主窗口、Dock 与对话框](.cursor/rules/qt-ui-engineering/11-window_dialog.md)
+- [大数据 Model-View](.cursor/rules/qt-ui-engineering/12-model_view.md)
+- [UI 状态持久化](.cursor/rules/qt-ui-engineering/13-ui_state_persistence.md)
+- [资源管理与 PyInstaller 发布](.cursor/rules/qt-ui-engineering/14-resource_deploy.md)
+
+可直接复用的最小示例：
+
+- [Hi-DPI 应用入口](snippets/hidpi_init.py)
+- [标准自定义对话框](snippets/custom_dialog_template.py)
+- [QTableView + QAbstractTableModel](snippets/tableview_model_demo.py)
+- [QSettings 窗口与 Dock 状态封装](snippets/ui_persistence_helper.py)
+- [qrc 与外部文件统一资源加载](snippets/resource_loader.py)
+
+三条 Widget 回归场景覆盖综合 UI/UX、Hi-DPI 与对话框、大数据表格；断言与对应规则、示例的映射见[机器可读评估](evals/evals.json)。

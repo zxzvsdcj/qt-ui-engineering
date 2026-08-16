@@ -159,3 +159,23 @@ The Skill is an independent synthesis. It paraphrases concepts and does not copy
 - No Qt SDK or Python binding is installed by this repository, so fixtures validate detection rather than compiling six GUI applications.
 - Visual taste and workflow quality require rendered, interactive review; deterministic tests do not claim to measure them.
 - Fresh-agent behavioral repetitions were not run in the creation session because subagent dispatch was not authorized. Six reusable pressure cases and a weighted rubric are included for later trials.
+
+## Advanced Qt Widget engineering rules
+
+The repository now includes a Widget-only engineering layer for Hi-DPI behavior, window interactions, large data views, UI state restoration, and packaged resources in desktop utility applications. The root Skill keeps its existing QML / Qt Quick adapters; the rules below must not be applied to QML code.
+
+- [Hi-DPI and cross-platform compatibility](.cursor/rules/qt-ui-engineering/10-hidpi_cross_platform.md)
+- [Main windows, docks, and dialogs](.cursor/rules/qt-ui-engineering/11-window_dialog.md)
+- [Large-data Model-View](.cursor/rules/qt-ui-engineering/12-model_view.md)
+- [UI state persistence](.cursor/rules/qt-ui-engineering/13-ui_state_persistence.md)
+- [Resource management and PyInstaller deployment](.cursor/rules/qt-ui-engineering/14-resource_deploy.md)
+
+Minimal reusable examples:
+
+- [Hi-DPI application bootstrap](snippets/hidpi_init.py)
+- [Standard custom dialog](snippets/custom_dialog_template.py)
+- [QTableView + QAbstractTableModel](snippets/tableview_model_demo.py)
+- [QSettings window and dock state helper](snippets/ui_persistence_helper.py)
+- [Unified qrc and external resource loader](snippets/resource_loader.py)
+
+Three Widget regression scenarios cover integrated UI/UX, Hi-DPI dialogs, and large tables. See the [machine-readable evaluations](evals/evals.json) for assertions mapped to the corresponding rules and examples.

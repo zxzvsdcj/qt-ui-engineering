@@ -330,6 +330,21 @@ class WidgetUpgradeContractTests(unittest.TestCase):
         self.assertIn("Resource deployment addendum", qss)
         self.assertIn("Widget engineering anti-pattern index", anti)
 
+    def test_bilingual_readmes_publish_widget_upgrade_entrypoints(self):
+        chinese = (ROOT / "README.md").read_text(encoding="utf-8")
+        english = (ROOT / "README.en.md").read_text(encoding="utf-8")
+        shared = (
+            ".cursor/rules/qt-ui-engineering/10-hidpi_cross_platform.md",
+            "snippets/tableview_model_demo.py",
+            "evals/evals.json",
+        )
+        for fragment in shared:
+            with self.subTest(fragment=fragment):
+                self.assertIn(fragment, chinese)
+                self.assertIn(fragment, english)
+        self.assertIn("Qt Widget 高级工程规则", chinese)
+        self.assertIn("Advanced Qt Widget engineering rules", english)
+
 
 if __name__ == "__main__":
     unittest.main()
