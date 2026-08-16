@@ -1,3 +1,4 @@
+import ast
 import re
 import unittest
 from pathlib import Path
@@ -18,6 +19,11 @@ class WidgetUpgradeContractTests(unittest.TestCase):
     def read_rule(self, name: str) -> str:
         path = RULE_ROOT / name
         self.assertTrue(path.is_file(), f"missing Cursor rule: {name}")
+        return path.read_text(encoding="utf-8")
+
+    def read_snippet(self, name: str) -> str:
+        path = ROOT / "snippets" / name
+        self.assertTrue(path.is_file(), f"missing snippet: {name}")
         return path.read_text(encoding="utf-8")
 
     def assert_standard_cursor_header(self, name: str) -> None:
@@ -161,6 +167,31 @@ class WidgetUpgradeContractTests(unittest.TestCase):
             with self.subTest(fragment=fragment):
                 self.assertIn(fragment, content)
         self.assertIsNone(re.search(r"[A-Za-z]:\\", content))
+
+    def test_hidpi_and_dialog_snippets_are_parseable_and_safe(self):
+        names = ("hidpi_init.py", "custom_dialog_template.py")
+        for name in names:
+            with self.subTest(name=name):
+                content = self.read_snippet(name)
+                ast.parse(content, filename=name)
+                self.assertIn("PySide6", content)
+                self.assertIn("PyQt6", content)
+                self.assertNotIn("setFixedSize(", content)
+                self.assertNotIn("QtQuick", content)
+
+        hidpi = self.read_snippet("hidpi_init.py")
+        self.assertIn("setHighDpiScaleFactorRoundingPolicy", hidpi)
+        self.assertLess(
+            hidpi.index("setHighDpiScaleFactorRoundingPolicy"),
+            hidpi.index("QApplication(argv)"),
+        )
+
+        dialog = self.read_snippet("custom_dialog_template.py")
+        self.assertIn("QDialogButtonBox", dialog)
+        self.assertIn("StandardButton.Ok", dialog)
+        self.assertIn("SettingsDialog(self)", dialog)
+        self.assertIn("self._settings_dialog", dialog)
+        self.assertIn("finished.connect", dialog)
 
 
 if __name__ == "__main__":
