@@ -1,3 +1,4 @@
+import re
 import unittest
 from pathlib import Path
 
@@ -102,6 +103,64 @@ class WidgetUpgradeContractTests(unittest.TestCase):
         ):
             with self.subTest(fragment=fragment):
                 self.assertIn(fragment, content)
+
+    def test_model_view_rule_has_performance_contract(self):
+        name = "12-model_view.md"
+        self.assert_standard_cursor_header(name)
+        self.assert_directive_structure(name)
+        content = self.read_rule(name)
+        for fragment in (
+            "QTableView",
+            "QAbstractTableModel",
+            "data()",
+            "beginInsertRows",
+            "dataChanged",
+            "QStyledItemDelegate",
+            "QTreeView",
+            "setUniformRowHeights",
+            "Interactive",
+            "ExtendedSelection",
+        ):
+            with self.subTest(fragment=fragment):
+                self.assertIn(fragment, content)
+
+    def test_state_rule_has_versioned_native_state_contract(self):
+        name = "13-ui_state_persistence.md"
+        self.assert_standard_cursor_header(name)
+        self.assert_directive_structure(name)
+        content = self.read_rule(name)
+        for fragment in (
+            "QSettings",
+            "saveGeometry",
+            "saveState",
+            "QSplitter",
+            "QHeaderView",
+            "objectName",
+            "版本",
+            "默认",
+        ):
+            with self.subTest(fragment=fragment):
+                self.assertIn(fragment, content)
+
+    def test_resource_rule_has_qrc_and_packaging_contract(self):
+        name = "14-resource_deploy.md"
+        self.assert_standard_cursor_header(name)
+        self.assert_directive_structure(name)
+        content = self.read_rule(name)
+        for fragment in (
+            "qrc",
+            ":/",
+            "pyside6-rcc",
+            "pyrcc6",
+            "__file__",
+            "PyInstaller",
+            "--add-data",
+            "SVG",
+            "QSS",
+        ):
+            with self.subTest(fragment=fragment):
+                self.assertIn(fragment, content)
+        self.assertIsNone(re.search(r"[A-Za-z]:\\", content))
 
 
 if __name__ == "__main__":
