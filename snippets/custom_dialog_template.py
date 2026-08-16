@@ -72,6 +72,7 @@ class MainWindow(QMainWindow):
         self.setWindowTitle(f"QDialog模板（{BINDING}）")
         self.resize(640, 420)
         self.setMinimumSize(480, 320)
+        self._modal_dialog: SettingsDialog | None = None
         self._settings_dialog: SettingsDialog | None = None
 
         modal_button = QPushButton("打开模态表单")
@@ -87,8 +88,17 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(content)
 
     def open_modal_dialog(self) -> None:
+        if self._modal_dialog is not None:
+            self._modal_dialog.raise_()
+            self._modal_dialog.activateWindow()
+            return
+
         dialog = SettingsDialog(self)
-        dialog.exec()
+        dialog.setAttribute(Qt.WidgetAttribute.WA_DeleteOnClose, True)
+        dialog.finished.connect(self._clear_modal_dialog)
+        self._modal_dialog = dialog
+        # open()保持窗口模态但不创建嵌套事件循环；结果由信号异步处理。
+        dialog.open()
 
     def open_modeless_dialog(self) -> None:
         if self._settings_dialog is not None:
@@ -105,6 +115,9 @@ class MainWindow(QMainWindow):
 
     def _clear_modeless_dialog(self, _result: int) -> None:
         self._settings_dialog = None
+
+    def _clear_modal_dialog(self, _result: int) -> None:
+        self._modal_dialog = None
 
 
 def main() -> int:

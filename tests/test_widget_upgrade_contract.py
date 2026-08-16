@@ -100,8 +100,10 @@ class WidgetUpgradeContractTests(unittest.TestCase):
             "QFileDialog",
             "QMessageBox",
             "QDialogButtonBox",
+            "open()",
             "exec()",
             "show()",
+            "嵌套事件循环",
             "ESC",
             "parent",
             "QDockWidget",
@@ -191,6 +193,9 @@ class WidgetUpgradeContractTests(unittest.TestCase):
         self.assertIn("QDialogButtonBox", dialog)
         self.assertIn("StandardButton.Ok", dialog)
         self.assertIn("SettingsDialog(self)", dialog)
+        self.assertIn("self._modal_dialog", dialog)
+        self.assertIn("dialog.open()", dialog)
+        self.assertNotIn("dialog.exec()", dialog)
         self.assertIn("self._settings_dialog", dialog)
         self.assertIn("finished.connect", dialog)
 
