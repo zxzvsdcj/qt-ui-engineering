@@ -40,3 +40,9 @@ See [Qt Style Sheet syntax](https://doc.qt.io/qt-6/stylesheet-syntax.html).
 - `:root`, CSS variables, flexbox, grid, media queries, transitions, filters, backdrop blur, and arbitrary box shadows are not general QSS features.
 - QSS cannot repair incorrect layouts or Model/View architecture.
 - Web selector intuition is not evidence that a Qt selector/sub-control exists.
+
+## Resource deployment addendum
+
+For QWidget resources that ship with the application, prefer qrc identifiers such as `:/themes/default.qss` and import the generated resource module before loading the stylesheet. Keep user-replaceable themes external and resolve them relative to the loader module's `__file__`, not the current working directory or a development-machine absolute path.
+
+Treat a missing built-in stylesheet as a visible packaging error. A missing optional user theme may fall back to the built-in qrc theme with one non-modal explanation. When building with PyInstaller, preserve external data paths through `datas` or `--add-data`, then launch the bundle from a clean directory to prove that SVG and QSS references resolve. See `.cursor/rules/qt-ui-engineering/14-resource_deploy.md` for the complete resource decision table.

@@ -157,3 +157,18 @@ For substantial work, report in this order:
 | Equating whitespace with quality | Give every gap a grouping, rhythm, or focus purpose. |
 | Equating density with compression | Improve structure before reducing size or spacing. |
 | Reviewing by taste alone | Attach evidence, consequence, severity, and remediation. |
+
+## QWidget advanced engineering
+
+When the detected target is Qt Widget and the task touches the relevant concern, load only the focused Cursor rules below in addition to the existing QWidget and binding/version adapters:
+
+- [Widget meta rules](.cursor/rules/qt-ui-engineering/0-meta.md)
+- [UX interaction](.cursor/rules/qt-ui-engineering/08-ux-interaction.md)
+- [SVG icon system](.cursor/rules/qt-ui-engineering/09-icon-system.md)
+- [Hi-DPI and cross-platform behavior](.cursor/rules/qt-ui-engineering/10-hidpi_cross_platform.md)
+- [Windows, docks, and dialogs](.cursor/rules/qt-ui-engineering/11-window_dialog.md)
+- [Model-View performance](.cursor/rules/qt-ui-engineering/12-model_view.md)
+- [UI state persistence](.cursor/rules/qt-ui-engineering/13-ui_state_persistence.md)
+- [Resources and deployment](.cursor/rules/qt-ui-engineering/14-resource_deploy.md)
+
+Use the runnable patterns in `snippets/` when the user requests PySide6/PyQt6 code. These advanced rules are Widget-only; QML or Qt Quick targets continue to use the existing Qt Quick/QML adapter and must not receive Widget implementation patterns.

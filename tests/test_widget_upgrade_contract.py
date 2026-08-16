@@ -302,6 +302,34 @@ class WidgetUpgradeContractTests(unittest.TestCase):
             with self.subTest(path=path):
                 self.assertTrue(path.is_file())
 
+    def test_root_skill_routes_widget_advanced_rules(self):
+        content = (ROOT / "SKILL.md").read_text(encoding="utf-8")
+        for name in (
+            "10-hidpi_cross_platform.md",
+            "11-window_dialog.md",
+            "12-model_view.md",
+            "13-ui_state_persistence.md",
+            "14-resource_deploy.md",
+        ):
+            with self.subTest(name=name):
+                self.assertIn(
+                    f".cursor/rules/qt-ui-engineering/{name}", content
+                )
+
+    def test_existing_references_receive_only_targeted_addenda(self):
+        spacing = (ROOT / "references" / "spacing-and-layout.md").read_text(
+            encoding="utf-8"
+        )
+        qss = (ROOT / "references" / "adapters" / "qss.md").read_text(
+            encoding="utf-8"
+        )
+        anti = (ROOT / "references" / "anti-ai-slop.md").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("Hi-DPI Widget addendum", spacing)
+        self.assertIn("Resource deployment addendum", qss)
+        self.assertIn("Widget engineering anti-pattern index", anti)
+
 
 if __name__ == "__main__":
     unittest.main()

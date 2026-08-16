@@ -26,3 +26,17 @@ Generated UI becomes generic when visual choices come from fashionable defaults 
 Before implementation, ask whether the same palette, layout, typography, and decorative treatment would appear for an unrelated product. Revise generic parts. After implementation, review a rendered interface when possible and remove one unnecessary flourish before adding another.
 
 Controlled density can be distinctive. Sparse or maximal visual directions are allowed only when the brief genuinely requires them; the default for operational Qt tools remains efficient, structured, and clear.
+
+## Widget engineering anti-pattern index
+
+Treat these engineering shortcuts as Blocking or Major findings when their impact matches the target workflow:
+
+- locking a general-purpose main window to a fixed size instead of supporting DPI, font, and workspace changes;
+- creating thousands of item-based table/list entries instead of using Model-View;
+- using blocking message boxes for routine progress or completion feedback;
+- performing I/O or heavy computation in signals, `data()`, or delegate painting;
+- restoring docks without stable object names, versioned state, or a usable default layout;
+- loading SVG, QSS, or images through development-machine absolute paths;
+- declaring a PyInstaller build complete without launching the bundle and checking its resources.
+
+Use `.cursor/rules/qt-ui-engineering/10-hidpi_cross_platform.md` through `14-resource_deploy.md` for the corresponding remediation contracts. These entries apply only to Widget implementations.

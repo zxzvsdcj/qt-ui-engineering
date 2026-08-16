@@ -28,3 +28,9 @@ Do not solve a broken layout by adding an outer scroll area. Do not set fixed si
 ## Review
 
 Resize through the supported range and check minimum/maximum sizes, splitter limits, saved geometry, long text, large fonts, empty data, and dense data. No region should become unusable before the documented minimum size.
+
+## Hi-DPI Widget addendum
+
+For QWidget targets, treat layout geometry as logical pixels and derive control height from font metrics, style metrics, and the project's spacing tokens. Prefer point-sized fonts, scalable SVG icons, layout stretch, `sizePolicy`, `minimumSize`, and an initial `resize` over fixed child geometry. A main window must not use `setFixedSize` as a general layout strategy.
+
+Verify 100%, 125%, 150%, and 200% scaling where the target platform supports them, then move the window between displays with different scale factors. Check long translations, larger system fonts, splitter minimums, dock contents, and custom-painted buffers with the correct device pixel ratio. Use `.cursor/rules/qt-ui-engineering/10-hidpi_cross_platform.md` for the complete Widget-only platform contract.
