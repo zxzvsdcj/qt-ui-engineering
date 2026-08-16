@@ -27,6 +27,12 @@ class WidgetUpgradeContractTests(unittest.TestCase):
         for glob in STANDARD_GLOBS:
             self.assertIn(f'"{glob}"', frontmatter, name)
 
+    def assert_directive_structure(self, name: str) -> None:
+        content = self.read_rule(name)
+        for fragment in ("场景", "推荐做法", "不推荐/禁止", "参考来源"):
+            with self.subTest(name=name, fragment=fragment):
+                self.assertIn(fragment, content)
+
     def test_meta_ux_and_icon_baselines_exist(self):
         names = ("0-meta.md", "08-ux-interaction.md", "09-icon-system.md")
         for name in names:
@@ -55,6 +61,47 @@ class WidgetUpgradeContractTests(unittest.TestCase):
         self.assertIn("11-window_dialog.md", content)
         self.assertIn("长任务", content)
         self.assertIn("取消", content)
+
+    def test_hidpi_rule_covers_qt6_and_platform_boundaries(self):
+        name = "10-hidpi_cross_platform.md"
+        self.assert_standard_cursor_header(name)
+        self.assert_directive_structure(name)
+        content = self.read_rule(name)
+        for fragment in (
+            "逻辑像素",
+            "设备像素",
+            "PointSize",
+            "Windows",
+            "macOS",
+            "Linux",
+            "PyInstaller",
+            "QT_SCALE_FACTOR",
+            "PyQt-Fluent-Widgets",
+            "Cura",
+        ):
+            with self.subTest(fragment=fragment):
+                self.assertIn(fragment, content)
+        self.assertNotIn("setFixedSize(", content)
+
+    def test_window_dialog_rule_covers_selection_lifecycle_and_docks(self):
+        name = "11-window_dialog.md"
+        self.assert_standard_cursor_header(name)
+        self.assert_directive_structure(name)
+        content = self.read_rule(name)
+        for fragment in (
+            "QFileDialog",
+            "QMessageBox",
+            "QDialogButtonBox",
+            "exec()",
+            "show()",
+            "ESC",
+            "parent",
+            "QDockWidget",
+            "objectName",
+            "BallonsTranslator",
+        ):
+            with self.subTest(fragment=fragment):
+                self.assertIn(fragment, content)
 
 
 if __name__ == "__main__":
