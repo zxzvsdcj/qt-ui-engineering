@@ -6,6 +6,14 @@ from pathlib import Path
 from scripts.validate_skill import REQUIRED_FILES, validate_skill
 
 
+CURSOR_RULE_HEADER = (
+    "---\n"
+    "description: Qt Widget engineering rule.\n"
+    'globs: ["**/*.py","**/*.cpp","**/*.h","**/*.ui","**/*.qrc"]\n'
+    "---\n"
+)
+
+
 def write_valid_skill(root: Path) -> None:
     expected_cases = {
         name: {
@@ -42,6 +50,11 @@ def write_valid_skill(root: Path) -> None:
         elif relative == "evals/expected/stack-detection.json":
             path.write_text(
                 json.dumps(expected_cases, indent=2), encoding="utf-8"
+            )
+        elif relative.startswith(".cursor/rules/"):
+            path.write_text(
+                CURSOR_RULE_HEADER + "# Valid Cursor rule\n\nComplete guidance.\n",
+                encoding="utf-8",
             )
         elif path.suffix == ".md":
             path.write_text("# Valid reference\n\nComplete guidance.\n", encoding="utf-8")
@@ -119,6 +132,33 @@ class ValidateSkillTests(unittest.TestCase):
             write_valid_skill(root)
             reference = root / "references" / "design-philosophy.md"
             reference.write_text("# Design\n\nTODO: finish this.\n", encoding="utf-8")
+
+            codes = issue_codes(root)
+
+        self.assertIn("placeholder", codes)
+
+    def test_cursor_rule_without_standard_frontmatter_is_reported(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_skill(root)
+            rule = root / ".cursor" / "rules" / "qt-ui-engineering" / "bad.md"
+            rule.parent.mkdir(parents=True, exist_ok=True)
+            rule.write_text("# Missing frontmatter\n", encoding="utf-8")
+
+            codes = issue_codes(root)
+
+        self.assertIn("cursor-rule-frontmatter", codes)
+
+    def test_placeholder_in_cursor_rule_is_reported(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_skill(root)
+            rule = root / ".cursor" / "rules" / "qt-ui-engineering" / "bad.md"
+            rule.parent.mkdir(parents=True, exist_ok=True)
+            rule.write_text(
+                CURSOR_RULE_HEADER + "# Rule\n\n" + "FIX" + "ME: incomplete.\n",
+                encoding="utf-8",
+            )
 
             codes = issue_codes(root)
 

@@ -85,6 +85,13 @@ PLACEHOLDER_PATTERN = re.compile(
     re.IGNORECASE,
 )
 SKILL_NAME_PATTERN = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+CURSOR_RULE_GLOBS = (
+    "**/*.py",
+    "**/*.cpp",
+    "**/*.h",
+    "**/*.ui",
+    "**/*.qrc",
+)
 
 
 @dataclass(frozen=True)
@@ -130,6 +137,40 @@ def _parse_frontmatter(path: Path) -> tuple[dict[str, str], list[ValidationIssue
         key, value = line.split(":", 1)
         values[key.strip()] = value.strip().strip('"\'')
     return values, []
+
+
+def _cursor_rule_files(root: Path):
+    directory = root / ".cursor" / "rules"
+    if directory.is_dir():
+        yield from sorted(directory.rglob("*.md"))
+
+
+def validate_cursor_rules(root: Path) -> list[ValidationIssue]:
+    issues: list[ValidationIssue] = []
+    for path in _cursor_rule_files(root):
+        values, frontmatter_issues = _parse_frontmatter(path)
+        if frontmatter_issues:
+            issues.append(
+                ValidationIssue(
+                    "cursor-rule-frontmatter",
+                    _relative(path, root),
+                    "Cursor rule must start with closed YAML frontmatter.",
+                )
+            )
+            continue
+
+        content = path.read_text(encoding="utf-8")
+        if not values.get("description") or any(
+            f'"{glob}"' not in content for glob in CURSOR_RULE_GLOBS
+        ):
+            issues.append(
+                ValidationIssue(
+                    "cursor-rule-frontmatter",
+                    _relative(path, root),
+                    "Cursor rule requires description and the standard Qt file globs.",
+                )
+            )
+    return issues
 
 
 def validate_frontmatter(root: Path) -> list[ValidationIssue]:
@@ -197,6 +238,7 @@ def _instruction_markdown_files(root: Path):
     for path in direct:
         if path.is_file():
             yield path
+    yield from _cursor_rule_files(root)
     for directory in (
         root / "references",
         root / "templates",
@@ -285,6 +327,7 @@ def validate_skill(root: Path) -> list[ValidationIssue]:
     issues: list[ValidationIssue] = []
     issues.extend(validate_required_files(root))
     issues.extend(validate_frontmatter(root))
+    issues.extend(validate_cursor_rules(root))
     issues.extend(validate_skill_line_count(root))
     issues.extend(validate_markdown_links(root))
     issues.extend(validate_placeholders(root))
