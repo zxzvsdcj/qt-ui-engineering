@@ -193,6 +193,65 @@ class WidgetUpgradeContractTests(unittest.TestCase):
         self.assertIn("self._settings_dialog", dialog)
         self.assertIn("finished.connect", dialog)
 
+    def test_data_state_and_resource_snippets_are_parseable(self):
+        names = (
+            "tableview_model_demo.py",
+            "ui_persistence_helper.py",
+            "resource_loader.py",
+        )
+        forbidden = (
+            "QTableWidget",
+            "QListWidget",
+            "setUniformRowHeights",
+            "setFixedSize(",
+            "_MEIPASS",
+            "QtQuick",
+        )
+        for name in names:
+            with self.subTest(name=name):
+                content = self.read_snippet(name)
+                ast.parse(content, filename=name)
+                self.assertIn("PySide6", content)
+                self.assertIn("PyQt6", content)
+                self.assertIsNone(re.search(r"[A-Za-z]:\\", content))
+                for fragment in forbidden:
+                    self.assertNotIn(fragment, content)
+
+    def test_table_model_snippet_uses_model_view_and_header_state(self):
+        content = self.read_snippet("tableview_model_demo.py")
+        for fragment in (
+            "QAbstractTableModel",
+            "QTableView",
+            "SelectionMode.SingleSelection",
+            "SelectionBehavior.SelectRows",
+            "ResizeMode.Interactive",
+            "verticalHeader().setDefaultSectionSize",
+            "horizontalHeader().saveState",
+            "horizontalHeader().restoreState",
+            "dataChanged",
+        ):
+            with self.subTest(fragment=fragment):
+                self.assertIn(fragment, content)
+
+    def test_persistence_and_resource_helpers_use_native_storage(self):
+        state = self.read_snippet("ui_persistence_helper.py")
+        for fragment in (
+            "QSettings",
+            "saveGeometry",
+            "restoreGeometry",
+            "saveState",
+            "restoreState",
+            "setObjectName",
+            "closeEvent",
+        ):
+            with self.subTest(kind="state", fragment=fragment):
+                self.assertIn(fragment, state)
+
+        resources = self.read_snippet("resource_loader.py")
+        for fragment in ("QFile", "__file__", 'startswith(\":/\")', "QIcon"):
+            with self.subTest(kind="resource", fragment=fragment):
+                self.assertIn(fragment, resources)
+
 
 if __name__ == "__main__":
     unittest.main()
