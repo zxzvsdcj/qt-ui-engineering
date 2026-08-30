@@ -1,0 +1,78 @@
+{
+  "skill_name": "qt-ui-engineering",
+  "evals": [
+    {
+      "id": "pyside6-qss-widget-redesign",
+      "category": "positive-trigger",
+      "prompt": "请用 PySide6 和 QSS 重做这个 QWidget 设置窗口：保留现有业务流程，改善表单层级、键盘顺序和亮暗主题切换，并说明你如何确认项目实际使用的 Qt 绑定与版本。",
+      "expected_behavior": [
+        "激活 qt-ui-engineering skill 并先报告检测到的 PySide6、QWidget 和 QSS 证据",
+        "保持现有 PySide6/QWidget 技术栈，不提出迁移到 PyQt 或 QML",
+        "选择与 QWidget 表单、主题、键盘可访问性和 QSS 相关的指导与 adapter"
+      ],
+      "forbidden_behavior": [
+        "把请求当作纯视觉建议而不识别 Qt UI 工程上下文",
+        "无证据地改用 PyQt、QML 或其他 UI 框架",
+        "加载与该 QWidget 设置窗口无关的协议、部署或 QML 参考"
+      ]
+    },
+    {
+      "id": "qt-networking-without-ui",
+      "category": "negative-trigger",
+      "prompt": "请修复一个 Qt 6 C++ QNetworkAccessManager 请求的重试逻辑：要求处理超时、HTTP 状态码和取消请求，但不改动任何窗口或控件。",
+      "expected_behavior": [
+        "不激活 qt-ui-engineering skill",
+        "将任务限定在 Qt networking、错误处理和取消语义，不追加 UI redesign guidance"
+      ],
+      "forbidden_behavior": [
+        "因为出现 Qt 6 就自动加载 QWidget、QML 或视觉设计参考",
+        "插入布局、主题、图标、间距或其他无 UI 请求的 redesign 建议"
+      ]
+    },
+    {
+      "id": "conflicting-pyqt-bindings",
+      "category": "stack-conflict",
+      "prompt": "请评审这个 Qt UI 项目并修复按钮点击后的对话框问题；代码片段同时出现 PyQt5.QtWidgets 和 PyQt6.QtWidgets 的导入，项目依赖文件也列出了两个绑定。",
+      "expected_behavior": [
+        "报告检测到 PyQt5 与 PyQt6 证据冲突，并标记为需要确认的 stack conflict",
+        "读取或引用 stack detection/conflict guidance 后再继续",
+        "在用户确认前不猜测绑定、不擅自迁移或给出绑定特定的最终修复"
+      ],
+      "forbidden_behavior": [
+        "仅凭一个 import 就断言项目绑定",
+        "直接把所有代码迁移到 PyQt5 或 PyQt6",
+        "忽略冲突并输出看似确定的 API 修改"
+      ]
+    },
+    {
+      "id": "qt6-cpp-qml-routing",
+      "category": "reference-routing",
+      "prompt": "请为 Qt 6 C++ 应用设计一个 QML/Qt Quick 仪表盘页面：C++ 暴露模型与信号，QML 负责布局和交互；请给出实现与可访问性建议。",
+      "expected_behavior": [
+        "识别 Qt 6 C++ 与 QML/Qt Quick 证据",
+        "选择 Qt Quick/QML guidance 以及 Qt 6 C++ binding/version guidance",
+        "只加载与 QML、Qt Quick、C++/Qt 6 交互和可访问性相关的参考"
+      ],
+      "forbidden_behavior": [
+        "把任务路由到 QWidget-only references 作为主要指导",
+        "建议用 QWidget 重写 QML 页面",
+        "加载与当前页面无关的 QWidget 表格、QSS 或 deployment-only references"
+      ]
+    },
+    {
+      "id": "large-qwidget-table-routing",
+      "category": "reference-routing",
+      "prompt": "请用项目已采用的 PySide6 为一个 QWidget 应用实现数万行业务表格：支持排序、筛选、单选、列宽持久化和键盘操作，并优先保证滚动性能。",
+      "expected_behavior": [
+        "识别 large QWidget table、PySide6 exact binding/version 和 Model-View 证据",
+        "选择 QWidget、精确绑定/版本、Model-View、表格交互与性能相关指导",
+        "根据任务需要选择性加载参考，并保持建议与 PySide6 QWidget 栈一致"
+      ],
+      "forbidden_behavior": [
+        "加载或依赖 QML/Qt Quick references 作为表格实现方案",
+        "加载与该任务无关的 deployment/resource packaging references",
+        "建议将 QWidget 表格迁移到 QML 或模糊处理 PySide6 版本差异"
+      ]
+    }
+  ]
+}
