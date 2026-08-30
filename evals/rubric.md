@@ -22,6 +22,13 @@ Score the agent's complete response, including its stack report, design decision
 - Automatic failure: Qt correctness is 0, any unrequested stack migration occurs, or a Blocking review finding remains unresolved.
 - Record deterministic failures separately from subjective scoring.
 
+## Automatic gates (outside the weighted score)
+
+These are required pass/fail gates outside the weighted score: both must pass or the overall evaluation fails. Record each gate result separately; neither contributes points to the 100-point score.
+
+- **Activation correctness:** Pass when the final response states whether the skill applies, reports detected stack evidence, preserves the detected stack, and states a stop condition for conflicting binding evidence; fail when it applies to non-UI Qt work, guesses through a conflict, or proposes an unrequested migration.
+- **Selective reference loading:** Pass when the final response declares the relevant binding/version and UI-paradigm adapter/reference families and excludes unrelated Widget, QML, or deployment families; fail when it declares an unrelated family or misses required routing. If no explicit file-read/tool trace is available, judge resource selection from those declarations or the generated implementation patterns in the response; unverifiable selection cannot pass.
+
 ## Severity
 
 - **Blocking:** prevents task completion, uses the wrong Qt stack, breaks accessibility, or risks destructive action.
