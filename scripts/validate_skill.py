@@ -272,15 +272,24 @@ def validate_openai_metadata(root: Path) -> list[ValidationIssue]:
         return []
 
     interface: dict[str, str] = {}
-    in_interface = False
+    interface_indent: int | None = None
     for line in path.read_text(encoding="utf-8").splitlines():
-        if not in_interface:
-            in_interface = line.strip() == "interface:"
+        stripped = line.lstrip()
+        indent = len(line) - len(stripped)
+        if interface_indent is None:
+            if line.strip() == "interface:":
+                interface_indent = indent
             continue
-        if line and not line[0].isspace():
+        if line and indent <= interface_indent:
             break
-        match = re.match(r"^\s+([a-z_]+):\s*(.*)$", line)
-        if match:
+        if indent != interface_indent + 2:
+            continue
+        match = re.match(r"^([a-z_]+):\s*(.*)$", stripped)
+        if match and match.group(1) in {
+            "display_name",
+            "short_description",
+            "default_prompt",
+        }:
             interface[match.group(1)] = match.group(2)
 
     required_fields = ("display_name", "short_description", "default_prompt")
@@ -312,7 +321,8 @@ def validate_widget_references(root: Path) -> list[ValidationIssue]:
     issues: list[ValidationIssue] = []
     for name in WIDGET_REFERENCE_NAMES:
         path = root / "references" / "widget" / name
-        if path.is_file() and path.read_text(encoding="utf-8").splitlines()[:1] == ["---"]:
+        lines = path.read_text(encoding="utf-8").splitlines() if path.is_file() else []
+        if lines and lines[0].strip() == "---":
             issues.append(
                 ValidationIssue(
                     "canonical-widget-reference",

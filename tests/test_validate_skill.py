@@ -111,8 +111,12 @@ class ValidateSkillTests(unittest.TestCase):
             '  display_name: "Qt UI Engineering"\n'
             '  default_prompt: "Use $qt-ui-engineering"\n',
             "interface:\n"
-            "  display_name: Qt UI Engineering\n"
+            '  display_name: "Qt UI Engineering"\n'
             '  short_description: ""\n'
+            '  default_prompt: "Use $qt-ui-engineering"\n',
+            "interface:\n"
+            "  display_name: Qt UI Engineering\n"
+            '  short_description: "Design and review native Qt interfaces"\n'
             '  default_prompt: "Use $qt-ui-engineering"\n',
         )
 
@@ -127,6 +131,25 @@ class ValidateSkillTests(unittest.TestCase):
                 codes = issue_codes(root)
 
             self.assertIn("openai-metadata", codes)
+
+    def test_openai_metadata_ignores_nested_interface_fields(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_skill(root)
+            metadata_path = root / "agents" / "openai.yaml"
+            metadata_path.write_text(
+                "interface:\n"
+                '  display_name: "Qt UI Engineering"\n'
+                '  short_description: "Design and review native Qt interfaces"\n'
+                '  default_prompt: ""\n'
+                "  options:\n"
+                '    default_prompt: "Use $qt-ui-engineering"\n',
+                encoding="utf-8",
+            )
+
+            codes = issue_codes(root)
+
+        self.assertIn("openai-metadata", codes)
 
     def test_openai_metadata_requires_skill_token_in_default_prompt(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -181,16 +204,23 @@ class ValidateSkillTests(unittest.TestCase):
         self.assertIn("canonical-widget-reference", codes)
 
     def test_canonical_widget_reference_cannot_have_cursor_frontmatter(self):
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            write_valid_skill(root)
-            reference = root / "references" / "widget" / "meta.md"
-            reference.parent.mkdir(parents=True, exist_ok=True)
-            reference.write_text(CURSOR_RULE_HEADER + "# Canonical guidance\n", encoding="utf-8")
+        for frontmatter_start in ("---\n", "--- \n"):
+            with self.subTest(frontmatter_start=frontmatter_start), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                write_valid_skill(root)
+                reference = root / "references" / "widget" / "meta.md"
+                reference.parent.mkdir(parents=True, exist_ok=True)
+                reference.write_text(
+                    frontmatter_start
+                    + "description: Widget guidance\n"
+                    + "---\n"
+                    + "# Canonical guidance\n",
+                    encoding="utf-8",
+                )
 
-            codes = issue_codes(root)
+                codes = issue_codes(root)
 
-        self.assertIn("canonical-widget-reference", codes)
+            self.assertIn("canonical-widget-reference", codes)
 
     def test_frontmatter_description_is_required(self):
         with tempfile.TemporaryDirectory() as directory:
