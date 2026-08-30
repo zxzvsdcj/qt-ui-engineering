@@ -7,6 +7,17 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 RULE_ROOT = ROOT / ".cursor" / "rules" / "qt-ui-engineering"
+WIDGET_REFERENCE_ROOT = ROOT / "references" / "widget"
+WIDGET_REFERENCE_NAMES = {
+    "0-meta.md": "meta.md",
+    "08-ux-interaction.md": "ux-interaction.md",
+    "09-icon-system.md": "icon-system.md",
+    "10-hidpi_cross_platform.md": "hidpi-cross-platform.md",
+    "11-window_dialog.md": "window-dialog.md",
+    "12-model_view.md": "model-view.md",
+    "13-ui_state_persistence.md": "ui-state-persistence.md",
+    "14-resource_deploy.md": "resource-deployment.md",
+}
 STANDARD_GLOBS = (
     "**/*.py",
     "**/*.cpp",
@@ -27,6 +38,11 @@ class WidgetUpgradeContractTests(unittest.TestCase):
         self.assertTrue(path.is_file(), f"missing snippet: {name}")
         return path.read_text(encoding="utf-8")
 
+    def read_widget_reference(self, cursor_name: str) -> str:
+        path = WIDGET_REFERENCE_ROOT / WIDGET_REFERENCE_NAMES[cursor_name]
+        self.assertTrue(path.is_file(), f"missing Widget reference: {path.name}")
+        return path.read_text(encoding="utf-8")
+
     def assert_standard_cursor_header(self, name: str) -> None:
         content = self.read_rule(name)
         self.assertTrue(content.startswith("---\n"), name)
@@ -36,7 +52,7 @@ class WidgetUpgradeContractTests(unittest.TestCase):
             self.assertIn(f'"{glob}"', frontmatter, name)
 
     def assert_directive_structure(self, name: str) -> None:
-        content = self.read_rule(name)
+        content = self.read_widget_reference(name)
         for fragment in ("场景", "推荐做法", "不推荐/禁止", "参考来源"):
             with self.subTest(name=name, fragment=fragment):
                 self.assertIn(fragment, content)
@@ -47,8 +63,18 @@ class WidgetUpgradeContractTests(unittest.TestCase):
             with self.subTest(name=name):
                 self.assert_standard_cursor_header(name)
 
+    def test_cursor_rules_are_thin_compatibility_entrypoints(self):
+        for cursor_name, reference_name in WIDGET_REFERENCE_NAMES.items():
+            with self.subTest(name=cursor_name):
+                content = self.read_rule(cursor_name)
+                self.assertLessEqual(len(content.splitlines()), 12)
+                self.assertIn(
+                    f"../../../references/widget/{reference_name}", content
+                )
+                self.assertIn("compatibility entrypoint", content.lower())
+
     def test_meta_declares_widget_scope_and_global_priorities(self):
-        content = self.read_rule("0-meta.md")
+        content = self.read_widget_reference("0-meta.md")
         required = (
             "Qt Widget",
             "Hi‑DPI",
@@ -65,8 +91,8 @@ class WidgetUpgradeContractTests(unittest.TestCase):
                 self.assertIn(fragment, content)
 
     def test_ux_addendum_links_dialog_and_long_task_guidance(self):
-        content = self.read_rule("08-ux-interaction.md")
-        self.assertIn("11-window_dialog.md", content)
+        content = self.read_widget_reference("08-ux-interaction.md")
+        self.assertIn("window-dialog.md", content)
         self.assertIn("长任务", content)
         self.assertIn("取消", content)
 
@@ -74,7 +100,7 @@ class WidgetUpgradeContractTests(unittest.TestCase):
         name = "10-hidpi_cross_platform.md"
         self.assert_standard_cursor_header(name)
         self.assert_directive_structure(name)
-        content = self.read_rule(name)
+        content = self.read_widget_reference(name)
         for fragment in (
             "逻辑像素",
             "设备像素",
@@ -95,7 +121,7 @@ class WidgetUpgradeContractTests(unittest.TestCase):
         name = "11-window_dialog.md"
         self.assert_standard_cursor_header(name)
         self.assert_directive_structure(name)
-        content = self.read_rule(name)
+        content = self.read_widget_reference(name)
         for fragment in (
             "QFileDialog",
             "QMessageBox",
@@ -117,7 +143,7 @@ class WidgetUpgradeContractTests(unittest.TestCase):
         name = "12-model_view.md"
         self.assert_standard_cursor_header(name)
         self.assert_directive_structure(name)
-        content = self.read_rule(name)
+        content = self.read_widget_reference(name)
         for fragment in (
             "QTableView",
             "QAbstractTableModel",
@@ -137,7 +163,7 @@ class WidgetUpgradeContractTests(unittest.TestCase):
         name = "13-ui_state_persistence.md"
         self.assert_standard_cursor_header(name)
         self.assert_directive_structure(name)
-        content = self.read_rule(name)
+        content = self.read_widget_reference(name)
         for fragment in (
             "QSettings",
             "saveGeometry",
@@ -155,7 +181,7 @@ class WidgetUpgradeContractTests(unittest.TestCase):
         name = "14-resource_deploy.md"
         self.assert_standard_cursor_header(name)
         self.assert_directive_structure(name)
-        content = self.read_rule(name)
+        content = self.read_widget_reference(name)
         for fragment in (
             "qrc",
             ":/",
@@ -300,6 +326,7 @@ class WidgetUpgradeContractTests(unittest.TestCase):
         )
         required = (
             *(RULE_ROOT / name for name in rule_names),
+            *(WIDGET_REFERENCE_ROOT / name for name in WIDGET_REFERENCE_NAMES.values()),
             *(ROOT / "snippets" / name for name in snippet_names),
             *(ROOT / "evals" / "cases" / name for name in eval_names),
         )
@@ -309,17 +336,10 @@ class WidgetUpgradeContractTests(unittest.TestCase):
 
     def test_root_skill_routes_widget_advanced_rules(self):
         content = (ROOT / "SKILL.md").read_text(encoding="utf-8")
-        for name in (
-            "10-hidpi_cross_platform.md",
-            "11-window_dialog.md",
-            "12-model_view.md",
-            "13-ui_state_persistence.md",
-            "14-resource_deploy.md",
-        ):
+        for name in WIDGET_REFERENCE_NAMES.values():
             with self.subTest(name=name):
-                self.assertIn(
-                    f".cursor/rules/qt-ui-engineering/{name}", content
-                )
+                self.assertIn(f"references/widget/{name}", content)
+        self.assertNotIn(".cursor/rules/", content)
 
     def test_existing_references_receive_only_targeted_addenda(self):
         spacing = (ROOT / "references" / "spacing-and-layout.md").read_text(

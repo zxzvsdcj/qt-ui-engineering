@@ -1,0 +1,4 @@
+interface:
+  display_name: "Qt UI Engineering"
+  short_description: "Design and review native Qt interfaces"
+  default_prompt: "Use $qt-ui-engineering to improve this Qt interface while preserving its current stack."
