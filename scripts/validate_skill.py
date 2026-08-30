@@ -55,6 +55,26 @@ WIDGET_RULE_NAMES = (
     "13-ui_state_persistence.md",
     "14-resource_deploy.md",
 )
+WIDGET_REFERENCE_NAMES = (
+    "meta.md",
+    "ux-interaction.md",
+    "icon-system.md",
+    "hidpi-cross-platform.md",
+    "window-dialog.md",
+    "model-view.md",
+    "ui-state-persistence.md",
+    "resource-deployment.md",
+)
+WIDGET_WRAPPER_TARGETS = {
+    "0-meta.md": "meta.md",
+    "08-ux-interaction.md": "ux-interaction.md",
+    "09-icon-system.md": "icon-system.md",
+    "10-hidpi_cross_platform.md": "hidpi-cross-platform.md",
+    "11-window_dialog.md": "window-dialog.md",
+    "12-model_view.md": "model-view.md",
+    "13-ui_state_persistence.md": "ui-state-persistence.md",
+    "14-resource_deploy.md": "resource-deployment.md",
+}
 SNIPPET_NAMES = (
     "hidpi_init.py",
     "custom_dialog_template.py",
@@ -70,8 +90,10 @@ WIDGET_EVAL_NAMES = (
 REQUIRED_FILES = (
     "SKILL.md",
     "README.md",
+    "agents/openai.yaml",
     *(f"references/{name}" for name in UNIVERSAL_REFERENCES),
     *(f"references/adapters/{name}" for name in ADAPTER_REFERENCES),
+    *(f"references/widget/{name}" for name in WIDGET_REFERENCE_NAMES),
     "templates/design-tokens.md",
     "templates/ui-design-brief.md",
     "templates/ui-review.md",
@@ -244,6 +266,79 @@ def validate_frontmatter(root: Path) -> list[ValidationIssue]:
     return issues
 
 
+def validate_openai_metadata(root: Path) -> list[ValidationIssue]:
+    path = root / "agents" / "openai.yaml"
+    if not path.is_file():
+        return []
+
+    interface: dict[str, str] = {}
+    in_interface = False
+    for line in path.read_text(encoding="utf-8").splitlines():
+        if not in_interface:
+            in_interface = line.strip() == "interface:"
+            continue
+        if line and not line[0].isspace():
+            break
+        match = re.match(r"^\s+([a-z_]+):\s*(.*)$", line)
+        if match:
+            interface[match.group(1)] = match.group(2)
+
+    required_fields = ("display_name", "short_description", "default_prompt")
+    values: dict[str, str] = {}
+    valid = True
+    for field in required_fields:
+        value = interface.get(field, "")
+        if len(value) < 3 or not (value.startswith('"') and value.endswith('"')):
+            valid = False
+            continue
+        values[field] = value[1:-1]
+        if not values[field]:
+            valid = False
+    if "$qt-ui-engineering" not in values.get("default_prompt", ""):
+        valid = False
+
+    if valid:
+        return []
+    return [
+        ValidationIssue(
+            "openai-metadata",
+            _relative(path, root),
+            "OpenAI interface metadata requires quoted non-empty fields and $qt-ui-engineering.",
+        )
+    ]
+
+
+def validate_widget_references(root: Path) -> list[ValidationIssue]:
+    issues: list[ValidationIssue] = []
+    for name in WIDGET_REFERENCE_NAMES:
+        path = root / "references" / "widget" / name
+        if path.is_file() and path.read_text(encoding="utf-8").splitlines()[:1] == ["---"]:
+            issues.append(
+                ValidationIssue(
+                    "canonical-widget-reference",
+                    _relative(path, root),
+                    "Canonical Widget references cannot contain Cursor YAML frontmatter.",
+                )
+            )
+
+    for name, target_name in WIDGET_WRAPPER_TARGETS.items():
+        path = root / ".cursor" / "rules" / "qt-ui-engineering" / name
+        if not path.is_file():
+            continue
+        content = path.read_text(encoding="utf-8")
+        expected_target = f"../../../references/widget/{target_name}"
+        targets = [match.group(1) for match in MARKDOWN_LINK_PATTERN.finditer(content)]
+        if expected_target not in targets or len(content.splitlines()) > 12:
+            issues.append(
+                ValidationIssue(
+                    "canonical-widget-reference",
+                    _relative(path, root),
+                    "Cursor Widget wrapper must link to its canonical reference and stay concise.",
+                )
+            )
+    return issues
+
+
 def validate_skill_line_count(root: Path) -> list[ValidationIssue]:
     path = root / "SKILL.md"
     if not path.is_file():
@@ -354,7 +449,9 @@ def validate_skill(root: Path) -> list[ValidationIssue]:
     issues: list[ValidationIssue] = []
     issues.extend(validate_required_files(root))
     issues.extend(validate_frontmatter(root))
+    issues.extend(validate_openai_metadata(root))
     issues.extend(validate_cursor_rules(root))
+    issues.extend(validate_widget_references(root))
     issues.extend(validate_skill_line_count(root))
     issues.extend(validate_markdown_links(root))
     issues.extend(validate_placeholders(root))
