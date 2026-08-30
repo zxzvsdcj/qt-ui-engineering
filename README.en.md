@@ -37,17 +37,20 @@ Support means the Skill selects stack-specific guidance. It does not claim that 
 
 ## Install
 
-The repository root is the Skill directory. Clone or copy it into the Skill location used by your Agent runtime.
+The repository root is the Skill directory. The recommended cross-runtime, project-scoped location is `.agents/skills/qt-ui-engineering/`.
 
-Project-scoped Cursor/Codex layout:
+Recommended cross-runtime project layout:
 
 ```text
 your-project/
-└── .cursor/
+└── .agents/
     └── skills/
         └── qt-ui-engineering/
             ├── SKILL.md
+            ├── agents/openai.yaml
             ├── references/
+            │   └── widget/
+            ├── .cursor/rules/            Cursor compatibility layer
             ├── templates/
             ├── examples/
             ├── evals/
@@ -57,10 +60,10 @@ your-project/
 Clone the public GitHub repository directly into that directory:
 
 ```text
-git clone https://github.com/zxzvsdcj/qt-ui-engineering.git .cursor/skills/qt-ui-engineering
+git clone https://github.com/zxzvsdcj/qt-ui-engineering.git .agents/skills/qt-ui-engineering
 ```
 
-Do not place it in a runtime-managed internal skills directory. If your runtime uses a different personal/project Skill path, use that runtime's documented location while keeping this directory structure intact.
+Runtimes may also discover Skills from documented native locations such as `.codex/skills/`, `.cursor/skills/`, `.claude/skills/`, or `.github/skills/`. Use only paths explicitly supported by the runtime you are using; no claim is made that every runtime supports every location. Keep this Skill's internal layout intact in any documented location you choose.
 
 ## Use
 
@@ -138,6 +141,9 @@ examples/                  concise adapter-boundary examples
 evals/                     six fixtures, pressure cases, expected profiles, rubric
 scripts/                   static detector and structural validator
 tests/                     standard-library automated tests
+agents/openai.yaml         OpenAI runtime discovery metadata
+references/widget/         canonical Widget engineering guidance
+.cursor/rules/             thin Cursor compatibility entrypoints
 ```
 
 The original requirements record is intentionally retained only in the local workspace and excluded from version control.
@@ -158,17 +164,17 @@ The Skill is an independent synthesis. It paraphrases concepts and does not copy
 - Adapters summarize meaningful boundaries; they do not replace the official documentation for an exact Qt minor version.
 - No Qt SDK or Python binding is installed by this repository, so fixtures validate detection rather than compiling six GUI applications.
 - Visual taste and workflow quality require rendered, interactive review; deterministic tests do not claim to measure them.
-- Fresh-agent behavioral repetitions were not run in the creation session because subagent dispatch was not authorized. Six reusable pressure cases and a weighted rubric are included for later trials.
+- Behavior evals define expected triggering, exclusion, stack-conflict, and reference-routing behavior. They are reusable evaluation definitions and do not claim that live multi-model trials were executed.
 
 ## Advanced Qt Widget engineering rules
 
-The repository now includes a Widget-only engineering layer for Hi-DPI behavior, window interactions, large data views, UI state restoration, and packaged resources in desktop utility applications. The root Skill keeps its existing QML / Qt Quick adapters; the rules below must not be applied to QML code.
+The repository now includes a Widget-only engineering layer for Hi-DPI behavior, window interactions, large data views, UI state restoration, and packaged resources in desktop utility applications. Canonical engineering guidance lives in `references/`; the root Skill keeps its existing QML / Qt Quick adapters, and the rules below must not be applied to QML code. Cursor wrappers in `.cursor/rules/` are thin compatibility entrypoints, not the normative source; for example, the legacy compatibility entrypoint `.cursor/rules/qt-ui-engineering/10-hidpi_cross_platform.md` routes to the canonical reference below.
 
-- [Hi-DPI and cross-platform compatibility](.cursor/rules/qt-ui-engineering/10-hidpi_cross_platform.md)
-- [Main windows, docks, and dialogs](.cursor/rules/qt-ui-engineering/11-window_dialog.md)
-- [Large-data Model-View](.cursor/rules/qt-ui-engineering/12-model_view.md)
-- [UI state persistence](.cursor/rules/qt-ui-engineering/13-ui_state_persistence.md)
-- [Resource management and PyInstaller deployment](.cursor/rules/qt-ui-engineering/14-resource_deploy.md)
+- [Hi-DPI and cross-platform compatibility](references/widget/hidpi-cross-platform.md)
+- [Main windows, docks, and dialogs](references/widget/window-dialog.md)
+- [Large-data Model-View](references/widget/model-view.md)
+- [UI state persistence](references/widget/ui-state-persistence.md)
+- [Resource management and PyInstaller deployment](references/widget/resource-deployment.md)
 
 Minimal reusable examples:
 

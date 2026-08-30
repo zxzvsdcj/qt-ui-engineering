@@ -37,17 +37,20 @@ flowchart TD
 
 ## 安装
 
-仓库根目录就是 Skill 目录。请将它克隆或复制到 Agent 运行时使用的 Skill 位置。
+仓库根目录就是 Skill 目录。推荐将它克隆或复制到跨运行时的项目级位置 `.agents/skills/qt-ui-engineering/`。
 
-项目级 Cursor/Codex 目录结构：
+推荐的跨运行时项目目录结构：
 
 ```text
 your-project/
-└── .cursor/
+└── .agents/
     └── skills/
         └── qt-ui-engineering/
             ├── SKILL.md
+            ├── agents/openai.yaml
             ├── references/
+            │   └── widget/
+            ├── .cursor/rules/            Cursor 兼容层
             ├── templates/
             ├── examples/
             ├── evals/
@@ -57,10 +60,10 @@ your-project/
 可以直接把公开 GitHub 仓库克隆到该目录：
 
 ```text
-git clone https://github.com/zxzvsdcj/qt-ui-engineering.git .cursor/skills/qt-ui-engineering
+git clone https://github.com/zxzvsdcj/qt-ui-engineering.git .agents/skills/qt-ui-engineering
 ```
 
-不要将它放入由运行时内部管理的 Skill 目录。如果你的运行时使用其他个人或项目级 Skill 路径，请遵循该运行时的文档，同时保持本项目的目录结构不变。
+各运行时也可能从其文档规定的原生位置发现 Skill，例如 `.codex/skills/`、`.cursor/skills/`、`.claude/skills/` 或 `.github/skills/`。请仅使用当前运行时明确支持的路径；不同运行时对这些位置的支持并不相同。无论选择哪个已文档化的位置，都应保持此 Skill 的内部目录结构不变。
 
 ## 使用
 
@@ -138,6 +141,9 @@ examples/                  简明的适配器边界示例
 evals/                     六类夹具、压力场景、预期配置和量表
 scripts/                   静态检测器和结构验证器
 tests/                     基于标准库的自动化测试
+agents/openai.yaml         OpenAI 运行时发现元数据
+references/widget/         Widget 高级工程指导的权威来源
+.cursor/rules/             Cursor 薄兼容入口层
 ```
 
 原始需求记录有意仅保留在本地工作区，并排除在版本控制之外。
@@ -158,17 +164,17 @@ tests/                     基于标准库的自动化测试
 - 适配器总结关键边界，但不能替代针对具体 Qt 次版本的官方文档。
 - 本仓库不会安装 Qt SDK 或 Python 绑定，因此夹具验证的是技术栈检测，而不是编译六个 GUI 应用程序。
 - 视觉品味和工作流质量需要通过渲染后的交互审查来判断；确定性测试不会宣称能够衡量这些内容。
-- 创建期间未运行由全新 Agent 重复执行的行为试验，因为当时未获得子代理调度授权。仓库已包含六个可复用的压力场景和一份加权量表，供后续试验使用。
+- 仓库包含行为评测，用于检查触发、排除、技术栈冲突与参考资料路由等预期行为；它们是可复用的评估定义，并不表示已经执行过实时多模型试验。
 
 ## Qt Widget 高级工程规则
 
-本仓库新增一层仅面向 Qt Widget 的工程规则，用于补齐自用桌面工具在高分屏、窗口交互、大数据视图、界面状态恢复和资源发布方面的实践。根 Skill 原有的 QML / Qt Quick 适配能力继续保留；以下规则不得套用于 QML 代码。
+本仓库新增一层仅面向 Qt Widget 的工程规则，用于补齐自用桌面工具在高分屏、窗口交互、大数据视图、界面状态恢复和资源发布方面的实践。权威工程指导位于 `references/`，根 Skill 原有的 QML / Qt Quick 适配能力继续保留；以下规则不得套用于 QML 代码。`.cursor/rules/` 中的 Cursor 包装器只是薄兼容入口，不是规范的主来源；例如旧版兼容入口 `.cursor/rules/qt-ui-engineering/10-hidpi_cross_platform.md` 会转向下方的权威参考资料。
 
-- [Hi-DPI 与跨平台兼容](.cursor/rules/qt-ui-engineering/10-hidpi_cross_platform.md)
-- [主窗口、Dock 与对话框](.cursor/rules/qt-ui-engineering/11-window_dialog.md)
-- [大数据 Model-View](.cursor/rules/qt-ui-engineering/12-model_view.md)
-- [UI 状态持久化](.cursor/rules/qt-ui-engineering/13-ui_state_persistence.md)
-- [资源管理与 PyInstaller 发布](.cursor/rules/qt-ui-engineering/14-resource_deploy.md)
+- [Hi-DPI 与跨平台兼容](references/widget/hidpi-cross-platform.md)
+- [主窗口、Dock 与对话框](references/widget/window-dialog.md)
+- [大数据 Model-View](references/widget/model-view.md)
+- [UI 状态持久化](references/widget/ui-state-persistence.md)
+- [资源管理与 PyInstaller 发布](references/widget/resource-deployment.md)
 
 可直接复用的最小示例：
 
