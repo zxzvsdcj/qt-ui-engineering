@@ -24,10 +24,10 @@ Score the agent's complete response, including its stack report, design decision
 
 ## Automatic gates (outside the weighted score)
 
-These gates add behavioral coverage without changing the 100-point weighting above:
+These are required pass/fail gates outside the weighted score: both must pass or the overall evaluation fails. Record each gate result separately; neither contributes points to the 100-point score.
 
-- **Activation correctness:** Full credit when the response activates the skill only for UI work, reports stack evidence, preserves the detected stack, and pauses on conflicting binding evidence; zero credit when it activates for non-UI Qt work, guesses through a conflict, or performs an unrequested migration.
-- **Selective reference loading:** Full credit when the response routes to the relevant binding/version and UI paradigm references while excluding unrelated Widget, QML, or deployment material; zero credit when it loads an unrelated reference family or misses the task's required routing.
+- **Activation correctness:** Pass when the final response states whether the skill applies, reports detected stack evidence, preserves the detected stack, and states a stop condition for conflicting binding evidence; fail when it applies to non-UI Qt work, guesses through a conflict, or proposes an unrequested migration.
+- **Selective reference loading:** Pass when the final response declares the relevant binding/version and UI-paradigm adapter/reference families and excludes unrelated Widget, QML, or deployment families; fail when it declares an unrelated family or misses required routing. If no explicit file-read/tool trace is available, judge resource selection from those declarations or the generated implementation patterns in the response; unverifiable selection cannot pass.
 
 ## Severity
 
