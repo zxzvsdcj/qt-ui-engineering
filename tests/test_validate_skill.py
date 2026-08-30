@@ -151,6 +151,24 @@ class ValidateSkillTests(unittest.TestCase):
 
         self.assertIn("openai-metadata", codes)
 
+    def test_openai_metadata_requires_a_top_level_interface_block(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_skill(root)
+            metadata_path = root / "agents" / "openai.yaml"
+            metadata_path.write_text(
+                "plugin:\n"
+                "  interface:\n"
+                '    display_name: "Qt UI Engineering"\n'
+                '    short_description: "Design and review native Qt interfaces"\n'
+                '    default_prompt: "Use $qt-ui-engineering to improve this Qt interface."\n',
+                encoding="utf-8",
+            )
+
+            codes = issue_codes(root)
+
+        self.assertIn("openai-metadata", codes)
+
     def test_openai_metadata_requires_skill_token_in_default_prompt(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -196,6 +214,23 @@ class ValidateSkillTests(unittest.TestCase):
                 + "Read [the canonical guidance](../../../references/widget/icon-system.md).\n"
                 + "\n".join("Duplicated guidance." for _ in range(8))
                 + "\n",
+                encoding="utf-8",
+            )
+
+            codes = issue_codes(root)
+
+        self.assertIn("canonical-widget-reference", codes)
+
+    def test_widget_wrapper_requires_exactly_one_canonical_link(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_valid_skill(root)
+            wrapper = root / ".cursor" / "rules" / "qt-ui-engineering" / "09-icon-system.md"
+            wrapper.write_text(
+                CURSOR_RULE_HEADER
+                + "# Valid Cursor rule\n\n"
+                + "Read [the canonical guidance](../../../references/widget/icon-system.md).\n"
+                + "See [another reference](../../../references/widget/meta.md).\n",
                 encoding="utf-8",
             )
 

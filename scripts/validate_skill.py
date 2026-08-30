@@ -277,7 +277,7 @@ def validate_openai_metadata(root: Path) -> list[ValidationIssue]:
         stripped = line.lstrip()
         indent = len(line) - len(stripped)
         if interface_indent is None:
-            if line.strip() == "interface:":
+            if line == "interface:":
                 interface_indent = indent
             continue
         if line and indent <= interface_indent:
@@ -338,7 +338,7 @@ def validate_widget_references(root: Path) -> list[ValidationIssue]:
         content = path.read_text(encoding="utf-8")
         expected_target = f"../../../references/widget/{target_name}"
         targets = [match.group(1) for match in MARKDOWN_LINK_PATTERN.finditer(content)]
-        if expected_target not in targets or len(content.splitlines()) > 12:
+        if targets != [expected_target] or len(content.splitlines()) > 12:
             issues.append(
                 ValidationIssue(
                     "canonical-widget-reference",

@@ -1,5 +1,6 @@
 import unittest
 import json
+import re
 from pathlib import Path
 
 
@@ -56,6 +57,75 @@ class SkillContractTests(unittest.TestCase):
             with self.subTest(link=link):
                 self.assertIn(link, content)
         self.assertNotIn(".cursor/rules/", content)
+
+    def test_skill_routes_universal_references_by_concern(self):
+        content = (ROOT / "SKILL.md").read_text(encoding="utf-8")
+        expected_routes = {
+            "design-philosophy.md": "product intent",
+            "information-density.md": "information density",
+            "visual-system.md": "visual system",
+            "typography.md": "typography",
+            "color-system.md": "color system",
+            "spacing-and-layout.md": "spacing or layout",
+            "interaction-and-feedback.md": "interaction or feedback",
+            "desktop-ux.md": "desktop UX",
+            "accessibility.md": "accessibility",
+            "anti-ai-slop.md": "anti-AI-slop",
+            "ui-review-checklist.md": "UI review",
+        }
+
+        for reference, concern in expected_routes.items():
+            with self.subTest(reference=reference):
+                self.assertIn(f"references/{reference}", content)
+                self.assertIn(concern, content)
+                self.assertRegex(
+                    content,
+                    rf"{re.escape(concern)}.*{re.escape(f'references/{reference}')}",
+                )
+
+    def test_skill_routes_templates_and_snippets_by_matching_concern(self):
+        content = (ROOT / "SKILL.md").read_text(encoding="utf-8")
+        expected_routes = {
+            "templates/design-tokens.md": "design tokens",
+            "templates/ui-design-brief.md": "design brief",
+            "templates/ui-review.md": "review artifact",
+            "snippets/hidpi_init.py": "Hi-DPI initialization",
+            "snippets/custom_dialog_template.py": "custom dialog",
+            "snippets/tableview_model_demo.py": "large data table",
+            "snippets/ui_persistence_helper.py": "UI state persistence",
+            "snippets/resource_loader.py": "resource loading",
+        }
+
+        for reference, concern in expected_routes.items():
+            with self.subTest(reference=reference):
+                self.assertIn(reference, content)
+                self.assertIn(concern, content)
+                self.assertRegex(
+                    content, rf"{re.escape(concern)}.*{re.escape(reference)}"
+                )
+        self.assertIn("PySide6 or PyQt6 QWidget", content)
+
+    def test_skill_routes_each_widget_reference_by_concern(self):
+        content = (ROOT / "SKILL.md").read_text(encoding="utf-8")
+        expected_routes = {
+            "references/widget/meta.md": "Widget architecture",
+            "references/widget/ux-interaction.md": "Widget interaction",
+            "references/widget/icon-system.md": "Widget icon",
+            "references/widget/hidpi-cross-platform.md": "Widget Hi-DPI",
+            "references/widget/window-dialog.md": "Widget window or dialog",
+            "references/widget/model-view.md": "Widget model-view",
+            "references/widget/ui-state-persistence.md": "Widget state persistence",
+            "references/widget/resource-deployment.md": "Widget resource deployment",
+        }
+
+        for reference, concern in expected_routes.items():
+            with self.subTest(reference=reference):
+                self.assertIn(reference, content)
+                self.assertIn(concern, content)
+                self.assertRegex(
+                    content, rf"{re.escape(concern)}.*{re.escape(reference)}"
+                )
+        self.assertIn("Do not load all Widget references", content)
 
     def test_behavior_evals_cover_triggering_conflicts_and_routing(self):
         path = ROOT / "evals" / "behavior-evals.json"
